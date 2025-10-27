@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.ngajiq.ui.main.splash.SplashScreen
 
 @Composable
 fun RootNavGraph(
@@ -15,17 +16,14 @@ fun RootNavGraph(
     ) {
         // Splash tetap sama
         composable(Routes.SPLASH) {
-            SplashScreen(onFinished = {
-                navController.navigate(Routes.MAIN_GRAPH) {
-                    popUpTo(Routes.SPLASH) { inclusive = true }
-                    launchSingleTop = true
-                }
-            })
+            SplashScreen(
+                navController
+            )
         }
         // Ganti: sebelumnya 'navigation(route = MAIN_GRAPH) { ... }'
         // Sekarang: satu composable yang menampilkan MainScaffold
         composable(Routes.MAIN_GRAPH) {
-            MainScreen() // kita buat di langkah 3.2
+            MainScreen()
         }
     }
 }
