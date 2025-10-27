@@ -31,7 +31,7 @@ sealed class BottomItem(
 ) {
     data object Home : BottomItem(Routes.HOME, "Home", Icons.Filled.Home)
     data object Materi : BottomItem(Routes.DETAIL, "Materi", Icons.Filled.Book)
-    data object Quiz : BottomItem(Routes.ADD, "Quiz", Icons.Filled.School)
+    data object Quiz : BottomItem(Routes.ADD, "Ngaji", Icons.Filled.School)
     data object Profile : BottomItem(Routes.PROFILE, "Profil", Icons.Filled.Person)
 }
 
