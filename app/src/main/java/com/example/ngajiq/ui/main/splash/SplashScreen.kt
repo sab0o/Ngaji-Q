@@ -1,6 +1,5 @@
 package com.example.ngajiq.ui.main.splash
 
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
@@ -14,20 +13,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import kotlinx.coroutines.delay
-
 import com.example.ngajiq.R
+import com.example.ngajiq.ui.navigation.Routes
 
 @Composable
 fun SplashScreen(navController: NavController) {
-    // Trigger side effect
+    // Jalankan efek side (delay + navigate)
     LaunchedEffect(Unit) {
-        delay(2000) // 2 seconds delay
-        navController.navigate("main") {
-            popUpTo("splash") { inclusive = true } // remove splash from back stack
+        delay(2000) // Delay 2 detik
+        navController.navigate(Routes.MAIN_GRAPH) {
+            popUpTo(Routes.SPLASH) { inclusive = true } // Hapus splash dari back stack
         }
     }
 
-    // Splash UI
+    // Tampilan UI Splash
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -42,7 +41,7 @@ fun SplashScreen(navController: NavController) {
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "My App",
+                text = "NgajiQ",
                 style = MaterialTheme.typography.titleLarge.copy(
                     fontSize = 28.sp,
                     fontWeight = FontWeight.Bold
