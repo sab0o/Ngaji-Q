@@ -1,4 +1,4 @@
-package com.example.ngajiq
+package com.example.ngajiq.ui.main.iqra
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
