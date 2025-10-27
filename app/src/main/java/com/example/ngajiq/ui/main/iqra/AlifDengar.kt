@@ -11,8 +11,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -194,11 +197,11 @@ fun MainLetterDisplay(onSpeakerClick: () -> Unit) {
                 .size(50.dp)
                 .background(Color(0xFFBFDBFE), RoundedCornerShape(12.dp))
         ) {
-//            Icon(
-//                Icons.Filled.Notifications,
-//                contentDescription = "Dengarkan Audio",
-//                tint = Color(0xFF60A5FA)
-//            )
+            Icon(
+                Icons.Filled.Notifications,
+                contentDescription = "Dengarkan Audio",
+                tint = Color(0xFF60A5FA)
+            )
         }
         Spacer(modifier = Modifier.width(16.dp))
 
