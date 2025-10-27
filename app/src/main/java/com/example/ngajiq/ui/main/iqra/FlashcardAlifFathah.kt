@@ -1,4 +1,4 @@
-package com.example.ngajiq
+package com.example.ngajiq.ui.main.iqra
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -22,6 +22,7 @@ import androidx.compose.ui.text.style.TextAlign // DITAMBAHKAN: Import untuk tex
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.ngajiq.R
 import com.example.ngajiq.ui.theme.NgajiQTheme
 
 class FlashcardAlif : ComponentActivity() {
