@@ -1,4 +1,9 @@
 package com.example.ngajiq.ui.main.profile
 
-class Profile {
+import androidx.compose.runtime.Composable
+
+
+@Composable
+fun ProfileScreen(){
+
 }
