@@ -17,12 +17,12 @@
             android:label="@string/title_activity_alif_dengar"
             android:theme="@style/Theme.NgajiQ" />
         <activity
-            android:name=".FlashcardAlif"
+            android:name=".ui.main.iqra.FlashcardAlif"
             android:exported="false"
             android:label="@string/title_activity_flashcard_alif"
             android:theme="@style/Theme.NgajiQ" />
         <activity
-            android:name=".LevelIqra1"
+            android:name=".ui.main.iqra.LevelIqra1"
             android:exported="false"
             android:label="@string/title_activity_level_iqra1"
             android:theme="@style/Theme.NgajiQ" />
