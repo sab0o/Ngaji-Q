@@ -34,8 +34,15 @@ fun HomeScreen(navController: NavHostController) {
         categories = categories,
         recommendations = recommendations,
         featuredCard = featuredCard,
-        onCategoryClick = { /* TODO: navigate ke halaman kategori */ },
-        onRecommendationClick = { /* TODO: navigate ke detail rekomendasi */ }
+        onCategoryClick = { category ->
+            navController.navigate("${Screen.KategoriVideoPembelajaran.route}/${category.name}")
+        },
+        onRecommendationClick = {
+            navController.navigate(Screen.RekomendasiVideoPembelajaran.route)
+        },
+        onSeeAllClick = {
+            navController.navigate(Screen.RekomendasiVideoPembelajaran.route)
+        }
     )
 }
 
