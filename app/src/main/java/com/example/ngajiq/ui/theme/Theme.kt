@@ -47,6 +47,7 @@ val AppTypography = Typography(
 val AppLightBlue = Color(0xFF5696F5) // Background
 val AppButtonBlue = Color(0xFF4FC3F7)
 val AppTextLinkBlue = Color(0xFF03A9F4)
+val AppLightBackgroundBlue = Color(0xFFCEF0FF)
 private val LightColorScheme = lightColorScheme(
     primary = AppLightBlue,
     secondary = AppButtonBlue,

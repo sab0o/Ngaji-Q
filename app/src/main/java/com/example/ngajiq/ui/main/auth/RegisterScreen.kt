@@ -36,7 +36,7 @@ fun RegisterScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.primary)
+            .background(AppLightBlue)
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
