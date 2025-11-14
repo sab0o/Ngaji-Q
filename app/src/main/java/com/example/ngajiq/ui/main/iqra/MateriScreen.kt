@@ -1,4 +1,4 @@
-package com.example.ngajiq.ui.iqra
+package com.example.ngajiq.ui.main.iqra
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*

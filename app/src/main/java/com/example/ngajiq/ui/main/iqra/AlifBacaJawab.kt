@@ -1,198 +1,159 @@
-package com.example.ngajiq.ui.iqra
+package com.example.ngajiq.ui.main.iqra
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import com.example.ngajiq.R
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.ngajiq.ui.main.iqra.components.ButtonLanjut
+import com.example.ngajiq.ui.main.iqra.components.DashedLetterBox
+import com.example.ngajiq.ui.main.iqra.components.HintTextWithSpeaker
+import com.example.ngajiq.ui.main.iqra.components.LetterBox
+import com.example.ngajiq.ui.main.iqra.components.ProgressBar
+import com.example.ngajiq.ui.theme.*
+import com.example.ngajiq.R
+import com.example.ngajiq.ui.main.iqra.components.HintTextWithSpeaker
+import com.example.ngajiq.ui.main.iqra.components.JawabanBenar
+import com.example.ngajiq.ui.main.iqra.components.LetterState
 
 @Composable
-fun AlifBacaJawabScreen(navController: NavController) {
-    var selectedAnswer by remember { mutableStateOf<String?>(null) }
-    var showResult by remember { mutableStateOf(false) }
-    var isCorrect by remember { mutableStateOf(false) }
+fun AlifJawabScreen(navController: NavController) {
 
-    val correctAnswer = "I" // jawaban benar (contoh huruf: Ba)
+    var selectedLetter by remember { mutableStateOf<String?>(null) }
+    val jawabanBenar = "I"
 
-    // Warna background hasil jawaban
-    val backgroundColor = when {
-        showResult && isCorrect -> Color(0xFFD5F8C6) // hijau muda
-        showResult && !isCorrect -> Color(0xFFFFD6D6) // merah muda
-        else -> Color.White
-    }
+    var showJawabanBenar by remember { mutableStateOf(false) }
 
-    Box(
+    // STATE → tombol Lanjut aktif kalau audio sudah dipencet
+    var isAudioPlayed by remember { mutableStateOf(true) } // sementara true biar bisa test
+
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(backgroundColor)
-            .padding(20.dp),
-        contentAlignment = Alignment.Center
+            .background(Color.White)
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxSize()
+
+        // Progress Bar
+        ProgressBar(
+            progress = 0.2f,
+            onPauseClick = { }
+        )
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        // Hint Text
+        HintTextWithSpeaker(
+            text = "Huruf apakah ini?",
+            onClick = { }
+        )
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        // Huruf utama
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(0.7f)
+                .height(200.dp),
         ) {
-
-            // === BAGIAN ATAS: Progress + Tombol pause ===
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                LinearProgressIndicator(
-                progress = { 0.4f },
+            DashedLetterBox(
+                imageRes = R.drawable.i,
                 modifier = Modifier
-                                        .fillMaxWidth(0.8f)
-                                        .height(8.dp),
-                color = Color(0xFF87CEFA),
-                trackColor = ProgressIndicatorDefaults.linearTrackColor,
-                strokeCap = ProgressIndicatorDefaults.LinearStrokeCap,
-                )
-                IconButton(onClick = { /* TODO: Pause action */ }) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_pause),
-                        contentDescription = "Pause",
-                        tint = Color(0xFF87CEFA)
-                    )
-                }
-            }
-
-            // === PERTANYAAN ===
-            Text(
-                text = "Huruf apakah ini?",
-                fontSize = 20.sp,
-                color = Color(0xFF555555),
-                modifier = Modifier.padding(top = 16.dp)
+                    .fillMaxWidth(0.7f)
+                    .align(Alignment.Center)
             )
+        }
 
-            // === HURUF ARAB ===
+        Spacer(modifier = Modifier.height(32.dp))
+
+        // 🔵 PILIHAN JAWABAN
+        LetterAnswer(
+            letters = listOf("A", "I", "U"),
+            selectedLetter = selectedLetter,
+            jawabanBenar = jawabanBenar,
+            onSelect = { selectedLetter = it }
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        // 🔵 Tombol PERIKSA JAWABAN
+        ButtonLanjut(
+            text = "PERIKSA JAWABAN",
+            onClick = {
+                if (selectedLetter != null) {
+                    // cek jawaban
+                    showJawabanBenar = (selectedLetter == jawabanBenar)
+                }
+            },
+            buttonColor = PrimaryBlue,
+            shadowColor = DeepBlue,
+            textColor = IceBlue,
+            modifier = Modifier
+                .fillMaxWidth(0.9f)
+                .height(56.dp)
+        )
+
+        // 🔵 POPUP JAWABAN BENAR
+        if (showJawabanBenar) {
             Box(
                 modifier = Modifier
-                    .size(300.dp)
-                    .background(Color(0xFFEAF6FF), RoundedCornerShape(16.dp)),
+                    .fillMaxSize()
+                    .background(Color(0x88000000)),
                 contentAlignment = Alignment.Center
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.i),
-                    contentDescription = "Huruf i",
-                    modifier = Modifier
-                        .size(150.dp) // ubah ukuran sesuai kebutuhan
+                JawabanBenar(
+                    onLanjutClick = {
+                        showJawabanBenar = false
+                        navController.navigate("halaman_selanjutnya")
+                    },
+                    modifier = Modifier.fillMaxWidth(0.9f)
                 )
             }
-
-            // === PILIHAN JAWABAN ===
-            Row(
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 24.dp)
-            ) {
-                listOf("A", "I", "U").forEach { option ->
-                    Button(
-                        onClick = { selectedAnswer = option },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = if (selectedAnswer == option)
-                                Color(0xFFB0E0E6) else Color(0xFFF1F1F1),
-                            contentColor = Color.Black
-                        ),
-                        modifier = Modifier.size(70.dp)
-                    ) {
-                        Text(option, fontSize = 20.sp, fontWeight = FontWeight.Bold)
-                    }
-                }
-            }
-
-            // === HASIL JAWABAN / TOMBOL PERIKSA ===
-            if (!showResult) {
-                Button(
-                    onClick = {
-                        if (selectedAnswer != null) {
-                            showResult = true
-                            isCorrect = selectedAnswer == correctAnswer
-                        }
-                    },
-                    enabled = selectedAnswer != null,
-                    shape = RoundedCornerShape(12.dp),
-                    modifier = Modifier
-                        .fillMaxWidth(0.8f)
-                        .height(50.dp)
-                ) {
-                    Text("Periksa Jawaban", fontSize = 18.sp)
-                }
-            } else {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    // Gambar Brokoli (Benar/Salah)
-                    Image(
-                        painter = painterResource(
-                            id = if (isCorrect) R.drawable.brokolibenar else R.drawable.brokolisalah
-                        ),
-                        contentDescription = "Brokoli Reaction",
-                        modifier = Modifier
-                            .size(120.dp)
-                            .padding(bottom = 8.dp)
-                    )
-
-                    // Teks hasil jawaban
-                    Text(
-                        text = if (isCorrect) "Jawabanmu Benar!" else "Yah, Jawabanmu Salah!",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = if (isCorrect) Color(0xFF388E3C) else Color(0xFFD32F2F)
-                    )
-
-                    Text(
-                        text = if (isCorrect)
-                            "Keren! Pemahamanmu di soal ini sudah bagus!"
-                        else
-                            "Lebih cermat lagi ya~",
-                        fontSize = 14.sp,
-                        color = Color.DarkGray,
-                        modifier = Modifier.padding(top = 4.dp)
-                    )
-
-                    Spacer(modifier = Modifier.height(20.dp))
-
-                    Button(
-                        onClick = { navController.navigate("flashcard") },
-                        shape = RoundedCornerShape(12.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF87CEFA)),
-                        modifier = Modifier
-                            .fillMaxWidth(0.8f)
-                            .height(50.dp)
-                    ) {
-                        Text("LANJUT", fontSize = 18.sp, color = Color.White)
-                    }
-                }
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+
 @Composable
-fun PreviewAlifBacaJawabScreen() {
-    // Gunakan tema aplikasi biar warna dan font sesuai
-    com.example.ngajiq.ui.theme.NgajiQTheme {
-        // Dummy navController agar tidak error
-        val navController = androidx.navigation.compose.rememberNavController()
-        AlifBacaJawabScreen(navController = navController)
+fun LetterAnswer(
+    letters: List<String>,
+    selectedLetter: String?,
+    jawabanBenar: String,
+    onSelect: (String) -> Unit
+) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(5.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        letters.forEach { letter ->
+
+            val state =
+                if (selectedLetter == null) LetterState.Normal
+                else if (letter == jawabanBenar && selectedLetter == letter) LetterState.Correct
+                else if (selectedLetter == letter) LetterState.Wrong
+                else LetterState.Normal
+
+            LetterBox(
+                letter = letter,
+                state = state,
+                enabled = true,
+                onClick = { onSelect(letter) }
+            )
+        }
+    }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewAlifJawabScreen() {
+    NgajiQTheme {
+        AlifJawabScreen(navController = rememberNavController())
     }
 }

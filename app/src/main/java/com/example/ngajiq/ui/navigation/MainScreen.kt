@@ -23,10 +23,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.ngajiq.data.repository.LocalVideoRepository
-import com.example.ngajiq.ui.iqra.MateriScreen
 import com.example.ngajiq.ui.main.auth.LoginScreen
 import com.example.ngajiq.ui.main.auth.RegisterScreen
 import com.example.ngajiq.ui.main.home.HomeScreen
+import com.example.ngajiq.ui.main.iqra.MateriScreen
 import com.example.ngajiq.ui.main.kategori.KategoriVideoPembelajaranScreen
 import com.example.ngajiq.ui.main.profile.ProfileScreen
 import com.example.ngajiq.ui.main.videoPembelajaran.RekomendasiVideoPembelajaranScreen
