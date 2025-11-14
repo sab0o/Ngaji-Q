@@ -26,7 +26,7 @@ import com.example.ngajiq.ui.common.PrimaryButton
 
 @Composable
 fun RegisterScreen(
-    onLoginClick: () -> Unit
+    onRegisterClick: () -> Unit
 ) {
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -122,7 +122,7 @@ fun RegisterScreen(
                             fontWeight = FontWeight.Bold,
                             fontSize = 14.sp
                         ),
-                        onClick = { onLoginClick() }
+                        onClick = { onRegisterClick() }
                     )
                 }
                 Spacer(Modifier.height(16.dp)) // Extra space for scroll

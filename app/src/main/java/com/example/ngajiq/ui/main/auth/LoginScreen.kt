@@ -30,7 +30,7 @@ val AppTextLinkBlue = Color(0xFF03A9F4)
 
 @Composable
 fun LoginScreen(
-    onRegisterClick: () -> Unit,
+    onLoginClick: () -> Unit,
     onForgotPasswordClick: () -> Unit
 ) {
     var username by remember { mutableStateOf("") }
@@ -146,7 +146,7 @@ fun LoginScreen(
                             fontWeight = FontWeight.Bold,
                             fontSize = 14.sp
                         ),
-                        onClick = { onRegisterClick() }
+                        onClick = { onLoginClick() }
                     )
                 }
             }

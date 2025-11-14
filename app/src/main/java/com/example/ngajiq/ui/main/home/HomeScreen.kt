@@ -22,6 +22,7 @@ import com.example.ngajiq.data.model.Category
 import com.example.ngajiq.data.model.Recommendation
 import com.example.ngajiq.data.repository.HomeRepository
 import com.example.ngajiq.ui.main.home.components.*
+import com.example.ngajiq.ui.navigation.Routes
 
 @Composable
 fun HomeScreen(navController: NavHostController) {
@@ -29,20 +30,17 @@ fun HomeScreen(navController: NavHostController) {
     val recommendations = HomeRepository.getRecommendations()
     val featuredCard = HomeRepository.getFeaturedCard()
 
-    // ❌ Jangan pakai Scaffold di sini, sudah ada di MainScreen
     HomeScreenContent(
         categories = categories,
         recommendations = recommendations,
+        navController=navController,
         featuredCard = featuredCard,
         onCategoryClick = { category ->
-            navController.navigate("${Screen.KategoriVideoPembelajaran.route}/${category.name}")
+            navController.navigate("${Routes.KATEGORI_VIDEO}/${category.name}")
         },
         onRecommendationClick = {
-            navController.navigate(Screen.RekomendasiVideoPembelajaran.route)
+            navController.navigate(Routes.REKOMENDASI)
         },
-        onSeeAllClick = {
-            navController.navigate(Screen.RekomendasiVideoPembelajaran.route)
-        }
     )
 }
 
@@ -52,6 +50,7 @@ fun HomeScreenContent(
     recommendations: List<Recommendation>,
     featuredCard: Recommendation,
     modifier: Modifier = Modifier,
+    navController: NavHostController,
     onCategoryClick: (Category) -> Unit = {},
     onRecommendationClick: (Recommendation) -> Unit = {}
 ) {
@@ -93,12 +92,20 @@ fun HomeScreenContent(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(text = "Rekomendasi Belajar", fontSize = 18.sp, fontWeight = FontWeight.Bold)
-            Text(
-                text = "Lihat semua >>",
-                fontSize = 12.sp,
-                color = Color.Blue.copy(alpha = 0.8f),
-                modifier = Modifier.clickable { }
-            )
+
+            TextButton(
+                onClick = { navController.navigate(Routes.REKOMENDASI)  },
+                colors = ButtonDefaults.textButtonColors(
+                    containerColor = Color.Transparent,
+                    contentColor = Color.Blue.copy(alpha = 0.8f)
+                ),
+                contentPadding = PaddingValues(0.dp) // supaya nggak terlalu tebal
+            ) {
+                Text(
+                    text = "Lihat semua >>",
+                    fontSize = 12.sp
+                )
+            }
         }
 
         LazyRow(

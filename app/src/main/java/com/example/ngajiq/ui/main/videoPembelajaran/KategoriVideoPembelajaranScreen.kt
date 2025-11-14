@@ -25,20 +25,22 @@ import com.example.ngajiq.ui.theme.NgajiQTheme
 val AppHeaderBlue = Color(0xFFE0F7FA)
 val AppDarkBlue = Color(0xFF0288D1)
 val AppChipSelectedBlue = Color(0xFFB3E5FC)
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun KategoriScreen(
+fun KategoriVideoPembelajaranScreen(
     repo: LocalVideoRepository = LocalVideoRepository,
     onBackClick: () -> Unit = {},
-    onVideoClick: (Video) -> Unit = {}
+    onVideoClick: (Video) -> Unit = {},
+    selectedCategory: String
 ) {
     var searchQuery by remember { mutableStateOf("") }
-    var selectedCategory by remember { mutableStateOf(repo.categories.first()) }
 
-    val filteredVideos = remember(searchQuery, selectedCategory, repo.videos) {
+    // ✅ Gunakan state yang mengambil nilai awal dari parameter
+    var selectedCategoryState by remember(selectedCategory) { mutableStateOf(selectedCategory) }
+
+    val filteredVideos = remember(searchQuery, selectedCategoryState, repo.videos) {
         repo.videos
-            .filter { it.category == selectedCategory }
+            .filter { it.category == selectedCategoryState }
             .filter { it.title.contains(searchQuery, ignoreCase = true) }
     }
 
@@ -74,7 +76,7 @@ fun KategoriScreen(
             // 🔍 Search Bar
             SearchInputField(
                 searchQuery = searchQuery,
-                onSearchChange = {searchQuery = it}
+                onSearchChange = { searchQuery = it }
             )
 
             // 🟦 Category Chips
@@ -87,8 +89,8 @@ fun KategoriScreen(
             ) {
                 repo.categories.forEach { category ->
                     FilterChip(
-                        selected = selectedCategory == category,
-                        onClick = { selectedCategory = category },
+                        selected = selectedCategoryState == category,
+                        onClick = { selectedCategoryState = category },
                         label = { Text(category) },
                         colors = FilterChipDefaults.filterChipColors(
                             selectedContainerColor = AppChipSelectedBlue,
@@ -124,10 +126,12 @@ fun KategoriScreen(
     }
 }
 
+
 @Preview(showBackground = true, widthDp = 360)
 @Composable
 fun KategoriScreenPreview() {
+    val repository = LocalVideoRepository
     NgajiQTheme {
-        KategoriScreen()
+        KategoriVideoPembelajaranScreen(repository, selectedCategory = "wudhu")
     }
 }

@@ -202,12 +202,12 @@ fun LevelRewardScreen(
 
         Spacer(modifier = Modifier.height(40.dp))
 
-//        Image(
-//            painter = painterResource(id = R.drawable.starsallstraight),
-//            contentDescription = "Reward Stars",
-//            contentScale = ContentScale.Fit,
-//            modifier = Modifier.width(200.dp).height(50.dp)
-//        )
+        Image(
+            painter = painterResource(id = R.drawable.starsallstraight),
+            contentDescription = "Reward Stars",
+            contentScale = ContentScale.Fit,
+            modifier = Modifier.width(200.dp).height(50.dp)
+        )
 
         Spacer(modifier = Modifier.height(24.dp))
 

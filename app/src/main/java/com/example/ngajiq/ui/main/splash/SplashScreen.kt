@@ -12,21 +12,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import kotlinx.coroutines.delay
 import com.example.ngajiq.R
 import com.example.ngajiq.ui.navigation.Routes
 
 @Composable
-fun SplashScreen(navController: NavController) {
-    // Jalankan efek side (delay + navigate)
+fun SplashScreen(navController: NavHostController) {
     LaunchedEffect(Unit) {
         delay(2000) // Delay 2 detik
-        navController.navigate(Routes.MAIN_GRAPH) {
-            popUpTo(Routes.SPLASH) { inclusive = true } // Hapus splash dari back stack
-        }
+        navController.navigate(Routes.LOGIN)
     }
 
-    // Tampilan UI Splash
     Box(
         modifier = Modifier
             .fillMaxSize()
