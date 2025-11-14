@@ -56,7 +56,7 @@ fun VideoCard(video: Video, onVideoClick: (Video) -> Unit) {
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(8.dp)
-                    .background(Color.Black.copy(alpha = 0.6f), RoundedCornerShape(4.dp))
+                    .background(Color.Black.copy(alpha = 0.6f), RoundedCornerShape(10.dp))
                     .padding(horizontal = 6.dp, vertical = 2.dp)
             )
             // 🔢 ID indicator
@@ -68,7 +68,7 @@ fun VideoCard(video: Video, onVideoClick: (Video) -> Unit) {
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(8.dp)
-                    .background(Color.Black.copy(alpha = 0.6f), RoundedCornerShape(4.dp))
+                    .background(Color.Black, RoundedCornerShape(12.dp))
                     .padding(horizontal = 6.dp, vertical = 2.dp)
             )
         }

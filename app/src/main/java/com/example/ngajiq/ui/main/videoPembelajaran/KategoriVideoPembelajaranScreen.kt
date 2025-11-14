@@ -134,6 +134,6 @@ fun KategoriVideoPembelajaranScreen(
 fun KategoriScreenPreview() {
     val repository = LocalVideoRepository
     NgajiQTheme {
-        KategoriVideoPembelajaranScreen(repository, selectedCategory = "wudhu")
+        KategoriVideoPembelajaranScreen(repository, selectedCategory = "Fiqih")
     }
 }

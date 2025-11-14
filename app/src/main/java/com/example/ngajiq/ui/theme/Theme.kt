@@ -17,18 +17,65 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.ngajiq.R
 
-// ---------------- COLOR SCHEMES ----------------
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
-)
+// ---------------- LIGHT COLOR SCHEME ----------------
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+    primary = PrimaryBlue,
+    onPrimary = Color.White,
+
+    primaryContainer = SoftAzure,
+    onPrimaryContainer = Color.Black,
+
+    secondary = AquaBlue,
+    onSecondary = Color.Black,
+
+    secondaryContainer = IceBlue,
+    onSecondaryContainer = Color.Black,
+
+    tertiary = DeepBlue,
+    onTertiary = Color.White,
+
+    background = Color(0xFFF9FBFF),
+    onBackground = Color(0xFF0F1A2A),
+
+    surface = Color.White,
+    onSurface = Color(0xFF0F1A2A),
+
+    surfaceVariant = IceBlue,
+    onSurfaceVariant = Color(0xFF274060),
+
+    outline = Color(0xFF6D86A6)
+)
+
+// ---------------- DARK COLOR SCHEME ----------------
+
+private val DarkColorScheme = darkColorScheme(
+    primary = PrimaryBlue,
+    onPrimary = Color.Black,
+
+    primaryContainer = DeepBlue,
+    onPrimaryContainer = IceBlue,
+
+    secondary = AquaBlue,
+    onSecondary = Color.Black,
+
+    secondaryContainer = SoftAzure,
+    onSecondaryContainer = Color.Black,
+
+    tertiary = IceBlue,
+    onTertiary = Color.Black,
+
+    background = Color(0xFF0D1117),
+    onBackground = IceBlue,
+
+    surface = Color(0xFF12161C),
+    onSurface = Color(0xFFE7F5FF),
+
+    surfaceVariant = Color(0xFF182028),
+    onSurfaceVariant = Color(0xFFBFD9FF),
+
+    outline = Color(0xFF5F6E82)
 )
 
 // ---------------- FONTS ----------------
@@ -53,14 +100,7 @@ val AppTypography = androidx.compose.material3.Typography(
     )
 )
 
-// ---------------- CUSTOM APP COLORS ----------------
-
-val AppLightBlue = Color(0xFF5696F5)
-val AppButtonBlue = Color(0xFF4FC3F7)
-val AppTextLinkBlue = Color(0xFF03A9F4)
-val AppLightBackgroundBlue = Color(0xFFCEF0FF)
-
-// ---------------- THEME ----------------
+// ---------------- THEME WRAPPER ----------------
 
 @Composable
 fun NgajiQTheme(
