@@ -36,10 +36,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.example.ngajiq.data.repository.LocalVideoRepository
 import com.example.ngajiq.ui.common.SearchInputField
+import com.example.ngajiq.ui.theme.AppDarkBlue
+import com.example.ngajiq.ui.theme.AppHeaderBlue
 import com.example.ngajiq.ui.theme.AppLightBackgroundBlue
 import com.example.ngajiq.ui.theme.NgajiQTheme
-import com.example.ngajiq.ui.main.kategori.AppDarkBlue
-import com.example.ngajiq.ui.main.kategori.AppHeaderBlue
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

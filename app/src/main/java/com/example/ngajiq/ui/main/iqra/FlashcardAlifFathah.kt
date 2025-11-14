@@ -1,8 +1,4 @@
-<<<<<<<< Updated upstream:app/src/main/java/com/example/ngajiq/ui/main/iqra/FlashcardAlifFathah.kt
 package com.example.ngajiq.ui.main.iqra
-========
-package com.example.ngajiq.ui.screen
->>>>>>>> Stashed changes:app/src/main/java/com/example/ngajiq/ui/screen/FlashcardAlifFathah.kt
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

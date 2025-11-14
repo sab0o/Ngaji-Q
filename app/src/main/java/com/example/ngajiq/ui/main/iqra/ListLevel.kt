@@ -1,4 +1,4 @@
-package com.example.ngajiq.ui.screen
+package com.example.ngajiq.ui.main.iqra
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.ngajiq.R
 import com.example.ngajiq.ui.theme.NgajiQTheme
 
@@ -204,6 +205,6 @@ fun LessonCard(
 fun ListLevelPreview() {
     NgajiQTheme {
         // Preview tidak butuh NavController, jadi buat dummy
-        ListLevelScreen(navController = androidx.navigation.compose.rememberNavController())
+        ListLevelScreen(navController = rememberNavController())
     }
 }

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
@@ -20,11 +21,12 @@ import com.example.ngajiq.data.model.Video
 import com.example.ngajiq.data.repository.LocalVideoRepository
 import com.example.ngajiq.ui.common.SearchInputField
 import com.example.ngajiq.ui.main.videoPembelajaran.VideoCard
+import com.example.ngajiq.ui.theme.AppChipSelectedBlue
+import com.example.ngajiq.ui.theme.AppDarkBlue
+import com.example.ngajiq.ui.theme.AppHeaderBlue
 import com.example.ngajiq.ui.theme.NgajiQTheme
 
-val AppHeaderBlue = Color(0xFFE0F7FA)
-val AppDarkBlue = Color(0xFF0288D1)
-val AppChipSelectedBlue = Color(0xFFB3E5FC)
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun KategoriVideoPembelajaranScreen(
@@ -35,7 +37,6 @@ fun KategoriVideoPembelajaranScreen(
 ) {
     var searchQuery by remember { mutableStateOf("") }
 
-    // ✅ Gunakan state yang mengambil nilai awal dari parameter
     var selectedCategoryState by remember(selectedCategory) { mutableStateOf(selectedCategory) }
 
     val filteredVideos = remember(searchQuery, selectedCategoryState, repo.videos) {
@@ -97,7 +98,8 @@ fun KategoriVideoPembelajaranScreen(
                             selectedLabelColor = AppDarkBlue,
                             containerColor = Color.White,
                             labelColor = Color.DarkGray
-                        )
+                        ),
+                        shape = RoundedCornerShape(20.dp)
                     )
                 }
             }

@@ -1,9 +1,5 @@
-<<<<<<<< Updated upstream:app/src/main/java/com/example/ngajiq/ui/main/iqra/AlifDengar.kt
 package com.example.ngajiq.ui.main.iqra
-========
-package com.example.ngajiq.ui.screen
->>>>>>>> Stashed changes:app/src/main/java/com/example/ngajiq/ui/screen/AlifDengar.kt
-
+//package com.example.ngajiq.ui.screen
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -12,16 +8,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-<<<<<<<< Updated upstream:app/src/main/java/com/example/ngajiq/ui/main/iqra/AlifDengar.kt
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
-========
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.*
->>>>>>>> Stashed changes:app/src/main/java/com/example/ngajiq/ui/screen/AlifDengar.kt
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,11 +26,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-<<<<<<<< Updated upstream:app/src/main/java/com/example/ngajiq/ui/main/iqra/AlifDengar.kt
-========
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
->>>>>>>> Stashed changes:app/src/main/java/com/example/ngajiq/ui/screen/AlifDengar.kt
 import com.example.ngajiq.R
 import com.example.ngajiq.ui.theme.NgajiQTheme
 
@@ -62,8 +50,8 @@ fun SpellingAlifScreen(navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // Header
-        SpellingHeader(progress = 0.1f)
-        Spacer(modifier = Modifier.height(16.dp))
+//        SpellingHeader(progress = 0.1f)
+//        Spacer(modifier = Modifier.height(16.dp))
 
         // Balon instruksi
         Box(
@@ -191,19 +179,16 @@ fun MainLetterDisplay(onSpeakerClick: () -> Unit) {
                 .size(50.dp)
                 .background(Color(0xFF55D5FF), RoundedCornerShape(12.dp))
         ) {
-<<<<<<<< Updated upstream:app/src/main/java/com/example/ngajiq/ui/main/iqra/AlifDengar.kt
 //            Icon(
 //                Icons.Filled.Notifications,
 //                contentDescription = "Dengarkan Audio",
 //                tint = Color(0xFF60A5FA)
 //            )
-========
             Image(
                 painter = painterResource(id = R.drawable.ic_speaker),
                 contentDescription = "Speaker",
                 modifier = Modifier.size(28.dp)
             )
->>>>>>>> Stashed changes:app/src/main/java/com/example/ngajiq/ui/screen/AlifDengar.kt
         }
 
         Spacer(modifier = Modifier.width(16.dp))
