@@ -2,6 +2,12 @@ package com.example.ngajiq.data.repository
 
 import com.example.ngajiq.R
 import com.example.ngajiq.data.model.Video
+import com.example.ngajiq.data.repository.LocalVideoRepository.akhlakVideos
+import com.example.ngajiq.data.repository.LocalVideoRepository.doaVideos
+import com.example.ngajiq.data.repository.LocalVideoRepository.fiqihVideos
+import com.example.ngajiq.data.repository.LocalVideoRepository.hadistVideos
+import com.example.ngajiq.data.repository.LocalVideoRepository.sejarahVideos
+import com.example.ngajiq.data.repository.LocalVideoRepository.tauhidVideos
 
 object LocalVideoRepository {
 
@@ -55,4 +61,17 @@ object LocalVideoRepository {
     // OPTIONAL: COMBINED LIST
     // ---------------------------
     val videos = fiqihVideos + tauhidVideos + akhlakVideos + sejarahVideos
+    fun getVideosByCategory(category: String): List<Video> {
+        return when (category) {
+            "Fiqih" -> fiqihVideos
+            "Tauhid" -> tauhidVideos
+            "Akhlak" -> akhlakVideos
+            "Sejarah" -> sejarahVideos
+            "Doa" -> doaVideos
+            "Hadist" -> hadistVideos
+            else -> emptyList()
+        }
+    }
 }
+
+

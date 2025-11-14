@@ -19,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.ngajiq.data.model.Video
 import com.example.ngajiq.data.repository.LocalVideoRepository
+
 import com.example.ngajiq.ui.common.SearchInputField
 import com.example.ngajiq.ui.main.videoPembelajaran.VideoCard
 import com.example.ngajiq.ui.theme.NgajiQTheme
@@ -102,7 +103,9 @@ fun KategoriVideoPembelajaranScreen(
                         ),
                         border = FilterChipDefaults.filterChipBorder(
                             borderColor = PrimaryBlue,
-                            selectedBorderColor = PrimaryBlue
+                            selectedBorderColor = PrimaryBlue,
+                            enabled = true,
+                            selected = false,
                         ),
                         shape = RoundedCornerShape(20.dp)
                     )
