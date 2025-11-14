@@ -11,21 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NgajiQ">
-        <activity
-            android:name=".AlifDengar"
-            android:exported="false"
-            android:label="@string/title_activity_alif_dengar"
-            android:theme="@style/Theme.NgajiQ" />
-        <activity
-            android:name=".ui.main.iqra.FlashcardAlif"
-            android:exported="false"
-            android:label="@string/title_activity_flashcard_alif"
-            android:theme="@style/Theme.NgajiQ" />
-        <activity
-            android:name=".ui.main.iqra.LevelIqra1"
-            android:exported="false"
-            android:label="@string/title_activity_level_iqra1"
-            android:theme="@style/Theme.NgajiQ" />
+
+        <!-- Hanya butuh MainActivity -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -37,6 +24,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>
