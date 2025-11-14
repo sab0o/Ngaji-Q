@@ -91,3 +91,33 @@ private fun BottomNavBar(navController: NavHostController) {
 private fun isTopLevelDestination(dest: NavDestination?, route: String): Boolean =
     dest?.hierarchy?.any { it.route == route } == true
 
+
+@Composable
+fun MainNavHost(navController: NavHostController) {
+    NavHost(navController, startDestination = Routes.LOGIN) {
+        composable(Routes.HOME) { HomeScreen(navController) }
+        composable(Routes.MATERI) { MateriScreen(selectedItem=1, navController) }
+        composable(Routes.LOGIN) { LoginScreen(
+            onLoginClick = { navController.navigate(Routes.HOME) },
+            onForgotPasswordClick = { navController.navigate(Routes.HOME) }
+        ) }
+        composable(Routes.REGISTER) { RegisterScreen(
+            onRegisterClick = { navController.navigate(Routes.HOME) }
+        )}
+        composable(Routes.ADD) { Text("Halaman Quiz") }
+        composable(Routes.PROFILE) { ProfileScreen() }
+        composable(
+            route = "${Routes.KATEGORI_VIDEO}/{categoryName}"
+        ) { backStackEntry ->
+            val categoryName = backStackEntry.arguments?.getString("categoryName") ?: ""
+            KategoriVideoPembelajaranScreen(selectedCategory = categoryName, onBackClick = { navController.popBackStack() })
+        }
+        composable(Routes.REKOMENDASI) {
+            RekomendasiVideoPembelajaranScreen(
+                repo = LocalVideoRepository,
+                onBackClick = {navController.popBackStack()}
+            )
+        }
+    }
+}
+

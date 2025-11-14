@@ -21,7 +21,7 @@ import com.example.ngajiq.ui.navigation.Routes
 fun SplashScreen(navController: NavHostController) {
     LaunchedEffect(Unit) {
         delay(2000) // Delay 2 detik
-        navController.navigate(Routes.LOGIN)
+        navController.navigate(Routes.MAIN_GRAPH)
     }
 
     Box(
