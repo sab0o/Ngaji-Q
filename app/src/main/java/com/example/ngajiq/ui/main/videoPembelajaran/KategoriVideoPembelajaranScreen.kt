@@ -21,10 +21,8 @@ import com.example.ngajiq.data.model.Video
 import com.example.ngajiq.data.repository.LocalVideoRepository
 import com.example.ngajiq.ui.common.SearchInputField
 import com.example.ngajiq.ui.main.videoPembelajaran.VideoCard
-import com.example.ngajiq.ui.theme.AppChipSelectedBlue
-import com.example.ngajiq.ui.theme.AppDarkBlue
-import com.example.ngajiq.ui.theme.AppHeaderBlue
 import com.example.ngajiq.ui.theme.NgajiQTheme
+import com.example.ngajiq.ui.theme.PrimaryBlue
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,9 +37,9 @@ fun KategoriVideoPembelajaranScreen(
 
     var selectedCategoryState by remember(selectedCategory) { mutableStateOf(selectedCategory) }
 
-    val filteredVideos = remember(searchQuery, selectedCategoryState, repo.videos) {
-        repo.videos
-            .filter { it.category == selectedCategoryState }
+    // 🔥 Ambil video sesuai kategori baru (per category list)
+    val filteredVideos = remember(searchQuery, selectedCategoryState) {
+        repo.getVideosByCategory(selectedCategoryState)
             .filter { it.title.contains(searchQuery, ignoreCase = true) }
     }
 
@@ -51,7 +49,7 @@ fun KategoriVideoPembelajaranScreen(
                 title = {
                     Text(
                         text = "Kategori",
-                        color = AppDarkBlue,
+                        color = Color.White,
                         fontWeight = FontWeight.Bold
                     )
                 },
@@ -60,20 +58,23 @@ fun KategoriVideoPembelajaranScreen(
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back",
-                            tint = AppDarkBlue
+                            tint = Color.White
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = AppHeaderBlue)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = PrimaryBlue)
             )
         }
     ) { paddingValues ->
+
         Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
                 .background(Color(0xFFE0F2F7))
         ) {
+
             // 🔍 Search Bar
             SearchInputField(
                 searchQuery = searchQuery,
@@ -94,10 +95,14 @@ fun KategoriVideoPembelajaranScreen(
                         onClick = { selectedCategoryState = category },
                         label = { Text(category) },
                         colors = FilterChipDefaults.filterChipColors(
-                            selectedContainerColor = AppChipSelectedBlue,
-                            selectedLabelColor = AppDarkBlue,
-                            containerColor = Color.White,
-                            labelColor = Color.DarkGray
+                            selectedContainerColor = PrimaryBlue,
+                            selectedLabelColor = Color.White,
+                            containerColor = Color.Transparent,
+                            labelColor = PrimaryBlue
+                        ),
+                        border = FilterChipDefaults.filterChipBorder(
+                            borderColor = PrimaryBlue,
+                            selectedBorderColor = PrimaryBlue
                         ),
                         shape = RoundedCornerShape(20.dp)
                     )
@@ -116,7 +121,8 @@ fun KategoriVideoPembelajaranScreen(
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                        .padding(vertical = 6.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     items(filteredVideos) { video ->

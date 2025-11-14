@@ -36,10 +36,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.example.ngajiq.data.repository.LocalVideoRepository
 import com.example.ngajiq.ui.common.SearchInputField
-import com.example.ngajiq.ui.theme.AppDarkBlue
-import com.example.ngajiq.ui.theme.AppHeaderBlue
-import com.example.ngajiq.ui.theme.AppLightBackgroundBlue
 import com.example.ngajiq.ui.theme.NgajiQTheme
+import com.example.ngajiq.ui.theme.PrimaryBlue
+import com.example.ngajiq.ui.theme.SoftAzure
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -60,7 +59,7 @@ fun RekomendasiVideoPembelajaranScreen(
                 title = {
                     Text(
                         text = "Rekomendasi",
-                        color = AppDarkBlue,
+                        color = PrimaryBlue,
                         fontWeight = FontWeight.Bold
                     )
                 },
@@ -69,12 +68,11 @@ fun RekomendasiVideoPembelajaranScreen(
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back",
-                            tint = AppDarkBlue
+                            tint = PrimaryBlue
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = AppHeaderBlue)
-            )
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = PrimaryBlue))
         }
     ) { paddingValues ->
         Column(
@@ -99,7 +97,7 @@ fun RekomendasiVideoPembelajaranScreen(
                             .fillMaxWidth()
                             .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
                             .clip(RoundedCornerShape(16.dp))
-                            .background(AppLightBackgroundBlue)
+                            .background(SoftAzure)
                             .clickable {
                                 // Bisa navigate ke VideoPlayerScreen misal
                                 // navController.navigate("video_player/${video.id}")

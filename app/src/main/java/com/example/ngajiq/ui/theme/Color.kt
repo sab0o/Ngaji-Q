@@ -9,6 +9,7 @@ val PrimaryBlue = Color(0xFF5696F5) // bright blue
 val DeepBlue = Color(0xFF297AF3)    // deeper saturated blue
 val AquaBlue = Color(0xFF49B9DE)    // aqua accent
 
+
 // Dark Theme Colors (Final)
 val DarkPrimary = PrimaryBlue
 val DarkOnPrimary = Color.Black
