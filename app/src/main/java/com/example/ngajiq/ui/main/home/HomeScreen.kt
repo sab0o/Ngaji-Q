@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -25,17 +26,16 @@ import com.example.ngajiq.ui.main.home.components.*
 
 @Composable
 fun HomeScreen(navController: NavHostController) {
-    val categories = HomeRepository.getCategories()
-    val recommendations = HomeRepository.getRecommendations()
-    val featuredCard = HomeRepository.getFeaturedCard()
+    val categories: List<Category> = HomeRepository.getCategories()
+    val recommendations: List<Recommendation> = HomeRepository.getRecommendations()
+    val featuredCard: Recommendation = HomeRepository.getFeaturedCard()
 
-    // ❌ Jangan pakai Scaffold di sini, sudah ada di MainScreen
     HomeScreenContent(
         categories = categories,
         recommendations = recommendations,
         featuredCard = featuredCard,
-        onCategoryClick = { /* TODO: navigate ke halaman kategori */ },
-        onRecommendationClick = { /* TODO: navigate ke detail rekomendasi */ }
+        onCategoryClick = { /* TODO */ },
+        onRecommendationClick = { /* TODO */ }
     )
 }
 
@@ -49,88 +49,98 @@ fun HomeScreenContent(
     onRecommendationClick: (Recommendation) -> Unit = {}
 ) {
     val scrollState = rememberScrollState()
+    val overlapHeight = 28.dp
 
     Column(
         modifier = modifier
-            .verticalScroll(scrollState)
             .fillMaxSize()
-            .background(Color.White)
+            .verticalScroll(scrollState)
     ) {
+
+        // HEADER
         HeaderSection()
-        SearchBarSection()
 
-        // --- KATEGORI ---
-        Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
-            Text(text = "Kategori", fontSize = 18.sp, fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.height(12.dp))
-
-            categories.chunked(3).forEach { rowCategories ->
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceAround
-                ) {
-                    rowCategories.forEach { category ->
-                        CategoryItem(category = category, onClick = { onCategoryClick(category) })
-                    }
-                }
-                Spacer(modifier = Modifier.height(16.dp))
-            }
-        }
-
-        // --- REKOMENDASI ---
-        Row(
+        // WHITE CARD CONTAINER
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+                .offset(y = -overlapHeight)
+                .background(
+                    color = Color.White,
+                    shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)
+                )
+                .padding(top = 24.dp)
         ) {
-            Text(text = "Rekomendasi Belajar", fontSize = 18.sp, fontWeight = FontWeight.Bold)
-            Text(
-                text = "Lihat semua >>",
-                fontSize = 12.sp,
-                color = Color.Blue.copy(alpha = 0.8f),
-                modifier = Modifier.clickable { }
-            )
-        }
 
-        LazyRow(
-            contentPadding = PaddingValues(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.padding(bottom = 24.dp)
-        ) {
-            items(recommendations) { item ->
-                RecommendationCard(
-                    item = item,
-                    modifier = Modifier
-                        .width(260.dp)
-                        .clickable { onRecommendationClick(item) }
+            // SEARCH BAR
+            SearchBarSection()
+
+            // CATEGORIES
+            Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
+                Text(
+                    text = "Kategori",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+
+                categories.chunked(3).forEach { rowCategories ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceAround
+                    ) {
+                        rowCategories.forEach { category ->
+                            CategoryItem(
+                                category = category,
+                                onClick = { onCategoryClick(category) }
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+            }
+
+            // RECOMMENDATION TITLE
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Rekomendasi",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = "Lihat semua",
+                    fontSize = 14.sp,
+                    color = Color(0xFF4A90E2),
+                    modifier = Modifier.clickable { }
                 )
             }
-        }
 
-        // --- FEATURED CARD ---
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp)
-                .padding(horizontal = 16.dp, vertical = 8.dp)
-        ) {
-            RecommendationCard(
-                item = featuredCard,
+            // RECOMMENDATION LIST
+            LazyRow(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .clickable { onRecommendationClick(featuredCard) }
-            )
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, bottom = 24.dp)
+            ) {
+                items(recommendations) { item ->
+                    RecommendationItem(
+                        recommendation = item,
+                        onClick = { onRecommendationClick(item) }
+                    )
+                    Spacer(modifier = Modifier.width(12.dp))
+                }
+            }
         }
-
-        Spacer(modifier = Modifier.height(32.dp))
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun HomeScreenPreview() {
-    val navController = rememberNavController()
-    HomeScreen(navController)
+fun PreviewHomeScreen() {
+    HomeScreen(rememberNavController())
 }

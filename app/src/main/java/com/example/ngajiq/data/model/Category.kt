@@ -5,6 +5,6 @@ import androidx.compose.ui.graphics.Color
 data class Category(
     val id: Int,
     val name: String,
-    val iconResId: Int,
-    val backgroundColor: Color
+    val iconId: Int = 0,
+    val iconColor: Color
 )
