@@ -10,16 +10,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.ngajiq.ui.main.iqra.components.ButtonLanjut
-import com.example.ngajiq.ui.main.iqra.components.DashedLetterBox
-import com.example.ngajiq.ui.main.iqra.components.HintTextWithSpeaker
-import com.example.ngajiq.ui.main.iqra.components.LetterBox
-import com.example.ngajiq.ui.main.iqra.components.ProgressBar
+import com.example.ngajiq.ui.main.iqra.components.*
 import com.example.ngajiq.ui.theme.*
 import com.example.ngajiq.R
-import com.example.ngajiq.ui.main.iqra.components.HintTextWithSpeaker
-import com.example.ngajiq.ui.main.iqra.components.JawabanBenar
-import com.example.ngajiq.ui.main.iqra.components.LetterState
 
 @Composable
 fun AlifJawabScreen(navController: NavController) {
@@ -28,9 +21,10 @@ fun AlifJawabScreen(navController: NavController) {
     val jawabanBenar = "I"
 
     var showJawabanBenar by remember { mutableStateOf(false) }
+    var showJawabanSalah by remember { mutableStateOf(false) }
 
-    // STATE → tombol Lanjut aktif kalau audio sudah dipencet
-    var isAudioPlayed by remember { mutableStateOf(true) } // sementara true biar bisa test
+    // Status apakah tombol PERIKSA sudah ditekan
+    var isChecked by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -40,23 +34,18 @@ fun AlifJawabScreen(navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        // Progress Bar
-        ProgressBar(
-            progress = 0.2f,
-            onPauseClick = { }
-        )
+        ProgressBar(progress = 0.2f, onPauseClick = {})
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        // Hint Text
         HintTextWithSpeaker(
             text = "Huruf apakah ini?",
-            onClick = { }
+            onClick = {}
         )
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        // Huruf utama
+        // Gambar huruf utama
         Box(
             modifier = Modifier
                 .fillMaxWidth(0.7f)
@@ -77,34 +66,40 @@ fun AlifJawabScreen(navController: NavController) {
             letters = listOf("A", "I", "U"),
             selectedLetter = selectedLetter,
             jawabanBenar = jawabanBenar,
-            onSelect = { selectedLetter = it }
+            isChecked = isChecked,
+            onSelect = {
+                selectedLetter = it
+                isChecked = false // reset warna
+            }
         )
 
         Spacer(modifier = Modifier.weight(1f))
 
-        // 🔵 Tombol PERIKSA JAWABAN
-        ButtonLanjut(
-            text = "PERIKSA JAWABAN",
-            onClick = {
-                if (selectedLetter != null) {
-                    // cek jawaban
-                    showJawabanBenar = (selectedLetter == jawabanBenar)
-                }
-            },
-            buttonColor = PrimaryBlue,
-            shadowColor = DeepBlue,
-            textColor = IceBlue,
-            modifier = Modifier
-                .fillMaxWidth(0.9f)
-                .height(56.dp)
-        )
+        // 🔵 TOMBOL PERIKSA
+        if (!isChecked) {
+            ButtonLanjut(
+                text = "PERIKSA JAWABAN",
+                onClick = {
+                    if (selectedLetter != null) {
+                        isChecked = true
+                        if (selectedLetter == jawabanBenar) showJawabanBenar = true
+                        else showJawabanSalah = true
+                    }
+                },
+                buttonColor = PrimaryBlue,
+                shadowColor = DeepBlue,
+                textColor = Color.White,
+                modifier = Modifier
+                    .fillMaxWidth(0.9f)
+                    .height(56.dp)
+            )
+        }
 
-        // 🔵 POPUP JAWABAN BENAR
+
+        // 🟢 POPUP JAWABAN BENAR
         if (showJawabanBenar) {
             Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color(0x88000000)),
+                modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
                 JawabanBenar(
@@ -116,39 +111,26 @@ fun AlifJawabScreen(navController: NavController) {
                 )
             }
         }
-    }
-}
 
 
-@Composable
-fun LetterAnswer(
-    letters: List<String>,
-    selectedLetter: String?,
-    jawabanBenar: String,
-    onSelect: (String) -> Unit
-) {
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(5.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        letters.forEach { letter ->
-
-            val state =
-                if (selectedLetter == null) LetterState.Normal
-                else if (letter == jawabanBenar && selectedLetter == letter) LetterState.Correct
-                else if (selectedLetter == letter) LetterState.Wrong
-                else LetterState.Normal
-
-            LetterBox(
-                letter = letter,
-                state = state,
-                enabled = true,
-                onClick = { onSelect(letter) }
-            )
+        // 🔴 POPUP JAWABAN SALAH
+        if (showJawabanSalah) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                JawabanSalah(
+                    onLanjutClick = {
+                        showJawabanSalah = false
+                        selectedLetter = null
+                        isChecked = false
+                    },
+                    modifier = Modifier.fillMaxWidth(0.9f)
+                )
+            }
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

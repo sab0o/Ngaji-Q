@@ -1,171 +1,207 @@
-package com.example.ngajiq.ui.iqra
+package com.example.ngajiq.ui.main.iqra
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.ngajiq.R
+import com.example.ngajiq.ui.main.iqra.components.ButtonLanjut
+import com.example.ngajiq.ui.main.iqra.components.ButtonReview
+import com.example.ngajiq.ui.main.iqra.components.PercentageCircle
+import com.example.ngajiq.ui.main.iqra.components.ScoreBox
+import com.example.ngajiq.ui.main.iqra.components.StarRating
 
-private val ColorPrimaryBlue = Color(0xFF86E1FF)
-private val ColorButtonBlue = Color(0xFF55D5FF)
-private val ColorLightBlue = Color(0xFFCEF0FF)
-private val ColorBlackText = Color(0xFF353535)
-private val ColorButtonShadowLanjut = Color(0xFF42BBE4)
-private val ColorButtonShadowReview = Color(0xFFD2E7FF)
-private val ColorWhite = Color(0xFFFFFFFF)
 
 @Composable
-fun LearningCompletionScreen() {
+fun LearningCompletionScreen(
+    correct: Int = 1,
+    incorrect: Int = 0,
+    onReview: () -> Unit = {}
+) {
+    // STATE untuk menentukan mode tampilan
+    var showCongrats by remember { mutableStateOf(false) }
+
+    if (showCongrats) {
+        CongratsScreen(
+            percentage = if (correct + incorrect == 0) 0
+            else ((correct.toFloat() / (correct + incorrect)) * 100).toInt()
+        )
+    } else {
+        ResultScreen(
+            correct = correct,
+            incorrect = incorrect,
+            onNext = { showCongrats = true },
+            onReview = onReview
+        )
+    }
+}
+
+@Composable
+fun ResultScreen(
+    correct: Int,
+    incorrect: Int,
+    onNext: () -> Unit,
+    onReview: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(ColorWhite),
+            .background(Color.White),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
+        // Confetti + Title
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(278.dp)
-                .background(Color.Transparent),
+                .height(260.dp),
             contentAlignment = Alignment.TopCenter
         ) {
             Image(
                 painter = painterResource(id = R.drawable.confetti),
-                contentDescription = "Confetti Background",
-                contentScale = ContentScale.FillWidth,
+                contentDescription = "",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp)
+                    .height(200.dp),
+                contentScale = ContentScale.FillWidth
             )
 
             Text(
                 text = "Hasil Belajar",
+                color = Color(0xFF353535),
                 fontSize = 28.sp,
                 fontWeight = FontWeight.ExtraBold,
-                color = ColorBlackText,
-                modifier = Modifier.padding(top = 218.dp)
+                modifier = Modifier.padding(top = 210.dp)
             )
         }
 
-        PercentageCircle(percentage = 100)
+        PercentageCircle(
+            percentage = if (correct + incorrect == 0) 0
+            else ((correct.toFloat() / (correct + incorrect)) * 100).toInt()
+        )
 
         Spacer(modifier = Modifier.height(48.dp))
 
-        ScoreBox(correct = 1, incorrect = 0)
+        ScoreBox(correct = correct, incorrect = incorrect)
 
         Spacer(modifier = Modifier.height(44.dp))
 
-        GameButton(
+        ButtonLanjut(
             text = "Lanjut",
-            onClick = { /* TODO: Navigasi ke Roadmap Level */ },
-            buttonColor = ColorButtonBlue,
-            shadowColor = ColorButtonShadowLanjut,
-            textColor = ColorWhite,
-            modifier = Modifier
-                .width(242.dp)
-                .padding(horizontal = 24.dp)
+            onClick = onNext,
+            buttonColor = Color(0xFF55D5FF),
+            shadowColor = Color(0xFF42BBE4),
+            textColor = Color.White,
+            modifier = Modifier.width(242.dp)
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        GameButton(
+        ButtonReview(
             text = "Review Jawaban",
-            onClick = { /* TODO: Navigasi ke Review Jawaban */ },
-            buttonColor = ColorWhite,
-            shadowColor = ColorButtonShadowReview,
-            textColor = ColorBlackText,
-            modifier = Modifier
-                .width(242.dp)
-                .padding(horizontal = 24.dp)
-        )
-
-        Spacer(modifier = Modifier.height(32.dp))
-    }
-}
-
-@Composable
-fun PercentageCircle(percentage: Int) {
-    val size = 150.dp
-    Box(
-        modifier = Modifier
-            .size(size)
-            .clip(CircleShape)
-            .border(20.dp, ColorLightBlue, CircleShape)
-            .background(Color.Transparent),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = "$percentage%",
-            fontSize = 32.sp,
-            fontWeight = FontWeight.ExtraBold,
-            color = ColorBlackText
+            onClick = onReview,
+            buttonColor = Color.White,
+            shadowColor = Color(0XFFD2E7FF),
+            textColor = Color.Black,
+            modifier = Modifier.width(242.dp)
         )
     }
 }
 
 @Composable
-fun ScoreBox(correct: Int, incorrect: Int) {
-    Row(
-        modifier = Modifier
-            .width(288.dp)
-            .height(104.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .border(2.dp, ColorLightBlue, RoundedCornerShape(16.dp))
-            .padding(vertical = 16.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        ScoreItem(
-            value = correct.toString(),
-            label = "Benar",
-            modifier = Modifier.fillMaxHeight()
-        )
-        ScoreItem(
-            value = incorrect.toString(),
-            label = "Salah",
-            modifier = Modifier.fillMaxHeight()
-        )
-    }
-}
-
-@Composable
-fun ScoreItem(value: String, label: String, modifier: Modifier = Modifier) {
+fun CongratsScreen(percentage: Int) {
     Column(
-        modifier = modifier.width(144.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = value,
-            fontSize = 32.sp,
-            fontWeight = FontWeight.ExtraBold,
-            color = ColorBlackText
+
+        // Confetti top
+        Image(
+            painter = painterResource(id = R.drawable.confetti),
+            contentDescription = "",
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(180.dp),
+            contentScale = ContentScale.FillWidth
         )
+
         Text(
-            text = label,
+            text = "Selamat!",
+            fontSize = 28.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color(0xFF353535)
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        StarRating(percentage = percentage)
+
+        Spacer(modifier = Modifier.height(50.dp))
+
+        Box(
+            modifier = Modifier
+                .background(Color(0xFFBFEAFF), shape = androidx.compose.foundation.shape.RoundedCornerShape(50))
+                .padding(horizontal = 24.dp, vertical = 8.dp)
+        ) {
+            Text(
+                text = "+50 Poin",
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White
+            )
+        }
+
+        Spacer(modifier = Modifier.height(50.dp))
+
+        Text(
+            text = "Bagus! Kamu berhasil\nmenyelesaikan pembelajaran ini",
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center,
+            color = Color(0xFF353535),
             fontSize = 16.sp,
             fontWeight = FontWeight.Medium,
-            color = ColorBlackText
+            lineHeight = 22.sp
+        )
+
+        Spacer(modifier = Modifier.height(50.dp))
+
+        ButtonLanjut(
+            text = "Lanjut",
+            onClick = { /* TODO: Navigation */ },
+            buttonColor = Color(0xFF55D5FF),
+            shadowColor = Color(0xFF42BBE4),
+            textColor = Color.White,
+            modifier = Modifier.width(242.dp)
         )
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, name = "Hasil Belajar")
 @Composable
-fun PreviewLearningCompletionScreen() {
-    LearningCompletionScreen()
+fun PreviewLearningCompletion() {
+    LearningCompletionScreen(
+        correct = 3,
+        incorrect = 1
+    )
+}
+
+@Preview(showBackground = true, name = "Congrats Screen")
+@Composable
+fun PreviewCongratsScreen() {
+    CongratsScreen(
+        percentage = 80
+    )
 }

@@ -11,7 +11,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -27,7 +26,8 @@ fun ButtonLanjut(
     textColor: Color,
     modifier: Modifier = Modifier,
     buttonHeight: Dp = 53.dp,
-    cornerRadius: Dp = 20.dp
+    cornerRadius: Dp = 20.dp,
+    fontSize: Int = 18
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
@@ -66,7 +66,7 @@ fun ButtonLanjut(
             Text(
                 text = text.uppercase(),
                 color = textColor,
-                fontSize = 18.sp,
+                fontSize = fontSize.sp,
                 fontWeight = FontWeight.ExtraBold,
             )
         }

@@ -17,30 +17,31 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.ngajiq.ui.main.iqra.MateriCard
+import com.example.ngajiq.R
+import com.example.ngajiq.ui.main.iqra.components.IqraCard
 import com.example.ngajiq.ui.theme.NgajiQTheme
 
 @Composable
 fun MateriScreen(selectedItem: Int, navController: NavController) {
-    var selectedItem by remember { mutableIntStateOf(1) }
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     ) {
 
+        // Background gradient
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(
                     Brush.verticalGradient(
-                        colors = listOf(Color(0xFF86D1FF), Color.White),
+                        colors = listOf(Color(0xFF5696F5), Color.White),
                         startY = 0f,
                         endY = 1000f
                     )
                 )
         )
 
+        // White card container
         Surface(
             modifier = Modifier
                 .fillMaxSize()
@@ -49,52 +50,94 @@ fun MateriScreen(selectedItem: Int, navController: NavController) {
             color = Color.White,
             shadowElevation = 4.dp
         ) {
+
             Column(
                 modifier = Modifier
                     .padding(16.dp)
                     .verticalScroll(rememberScrollState())
             ) {
+
                 Spacer(modifier = Modifier.height(34.dp))
 
-                MateriCard(
-                    title = "Iqra 1",
-                    desc = "Mengenal huruf hijaiyah",
-                    progress = 3,
-                    isActive = true,
-                    onClick = { navController.navigate("levelIqra1") } // Navigasi ke layar Iqra 1
+                // Iqra 1
+                IqraCard(
+                    iqraNumber = 1,
+                    title = "Mengenal huruf hijaiyah",
+                    currentLevel = 1,
+                    totalLevel = 30,
+                    imageRes = R.drawable.iqra,   // sesuaikan nama file
+                    onClick = { navController.navigate("levelIqra1") }
                 )
+
                 Spacer(modifier = Modifier.height(12.dp))
-                MateriCard("Iqra 2", "Belajar membaca kata", 0)
+
+                IqraCard(
+                    iqraNumber = 2,
+                    title = "Belajar membaca kata",
+                    currentLevel = 0,
+                    totalLevel = 30,
+                    imageRes = R.drawable.iqra
+                )
+
                 Spacer(modifier = Modifier.height(12.dp))
-                MateriCard("Iqra 3", "Belajar mad thabi’i", 0)
+
+                IqraCard(
+                    iqraNumber = 3,
+                    title = "Belajar mad thabi’i",
+                    currentLevel = 0,
+                    totalLevel = 30,
+                    imageRes = R.drawable.iqra
+                )
+
                 Spacer(modifier = Modifier.height(12.dp))
-                MateriCard("Iqra 4", "Mengenal tanda bacaan", 0)
+
+                IqraCard(
+                    iqraNumber = 4,
+                    title = "Mengenal tanda bacaan",
+                    currentLevel = 0,
+                    totalLevel = 30,
+                    imageRes = R.drawable.iqra
+                )
+
                 Spacer(modifier = Modifier.height(12.dp))
-                MateriCard("Iqra 5", "Belajar Waqaf dan Qalqalah", 0)
+
+                IqraCard(
+                    iqraNumber = 5,
+                    title = "Belajar Waqaf dan Qalqalah",
+                    currentLevel = 0,
+                    totalLevel = 30,
+                    imageRes = R.drawable.iqra
+                )
+
                 Spacer(modifier = Modifier.height(12.dp))
-                MateriCard("Iqra 6", "Memahami Tajwid", 0)
+
+                IqraCard(
+                    iqraNumber = 6,
+                    title = "Memahami Tajwid",
+                    currentLevel = 0,
+                    totalLevel = 30,
+                    imageRes = R.drawable.iqra
+                )
             }
         }
 
-        // Header atas
+        // Header
         Text(
             text = "Belajar Iqra",
             fontSize = 32.sp,
             fontWeight = FontWeight.Bold,
             color = Color.White,
             modifier = Modifier
-                .padding(start = 37.dp, top = 65.dp, end = 24.dp)
+                .padding(start = 37.dp, top = 49.dp)
                 .align(Alignment.TopStart)
         )
     }
 }
 
-
-
 @Preview(showBackground = true)
 @Composable
 fun MateriPreview() {
     NgajiQTheme {
-        MateriScreen(selectedItem = 1, navController = rememberNavController())
+        MateriScreen(1, navController = rememberNavController())
     }
 }
