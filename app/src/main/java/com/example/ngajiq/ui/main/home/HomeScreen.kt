@@ -10,7 +10,23 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.example.ngajiq.data.model.Category
+import com.example.ngajiq.data.model.Recommendation
+import com.example.ngajiq.data.repository.HomeRepository
+import com.example.ngajiq.ui.main.home.components.CategoryItem
+import com.example.ngajiq.ui.main.home.components.HeaderSection
+import com.example.ngajiq.ui.main.home.components.RecommendationItem
+import com.example.ngajiq.ui.main.home.components.SearchBarSection
 
 @Composable
 fun HomeScreen(navController: NavHostController) {
