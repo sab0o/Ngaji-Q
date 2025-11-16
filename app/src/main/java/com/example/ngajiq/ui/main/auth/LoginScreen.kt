@@ -69,11 +69,16 @@ fun LoginScreen(
                             color = Color.Black
                             ,modifier=Modifier.padding(5.dp),
                         )
+                        Spacer(Modifier.height(40.dp))
                         Text(
                             text = "di Ngaji-Q",
                             fontSize = 44.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Color.White
+                            color = Color.White,
+                            modifier=Modifier
+                                .padding(top=20.dp)
+                                .align(Alignment.BottomCenter)
+
                         )
                     }
 

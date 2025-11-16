@@ -22,6 +22,8 @@ import androidx.compose.ui.unit.sp
 import com.example.ngajiq.ui.common.CustomTextField
 import com.example.ngajiq.ui.common.GoogleButton
 import com.example.ngajiq.ui.common.PrimaryButton
+import com.example.ngajiq.R
+
 
 
 @Composable
@@ -49,22 +51,35 @@ fun RegisterScreen(
                     .weight(1f),
                 contentAlignment = Alignment.Center
             ) {
+
+                // Column for centered texts
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-//                    Image(
-//                        painter = painterResource(id = R.drawable.ngaji_header), // Use same header
-//                        contentDescription = "Ngaji-Q Header",
-//                        modifier = Modifier.height(120.dp)
-//                    )
-                    Spacer(Modifier.height(16.dp))
                     Text(
-                        text = "Yuk Teman-Teman\nGabung Bersama Kami",
+                        text = "Yuk Teman-Teman",
                         fontSize = 22.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.Black,
-                        textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                        color = Color.Black
+                    )
+
+                    Text(
+                        text = "Gabung Bersama Kami",
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
                     )
                 }
+
+                // Freely movable image
+                Image(
+                    painter = painterResource(id = R.drawable.ngaji_header),
+                    contentDescription = "Ngaji-Q Header",
+                    modifier = Modifier
+                        .height(120.dp)
+                        .align(Alignment.BottomCenter)   // <--- change this to anywhere
+                    //.offset(y = 20.dp)              // <--- fine-tuning movement
+                )
             }
+
 
             // 2. Form Section
             Column(
