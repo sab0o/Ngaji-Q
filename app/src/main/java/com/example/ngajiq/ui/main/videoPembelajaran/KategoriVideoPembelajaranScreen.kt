@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
@@ -18,27 +19,28 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.ngajiq.data.model.Video
 import com.example.ngajiq.data.repository.LocalVideoRepository
+
 import com.example.ngajiq.ui.common.SearchInputField
 import com.example.ngajiq.ui.main.videoPembelajaran.VideoCard
 import com.example.ngajiq.ui.theme.NgajiQTheme
+import com.example.ngajiq.ui.theme.PrimaryBlue
 
-val AppHeaderBlue = Color(0xFFE0F7FA)
-val AppDarkBlue = Color(0xFF0288D1)
-val AppChipSelectedBlue = Color(0xFFB3E5FC)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun KategoriScreen(
+fun KategoriVideoPembelajaranScreen(
     repo: LocalVideoRepository = LocalVideoRepository,
     onBackClick: () -> Unit = {},
-    onVideoClick: (Video) -> Unit = {}
+    onVideoClick: (Video) -> Unit = {},
+    selectedCategory: String
 ) {
     var searchQuery by remember { mutableStateOf("") }
-    var selectedCategory by remember { mutableStateOf(repo.categories.first()) }
 
-    val filteredVideos = remember(searchQuery, selectedCategory, repo.videos) {
-        repo.videos
-            .filter { it.category == selectedCategory }
+    var selectedCategoryState by remember(selectedCategory) { mutableStateOf(selectedCategory) }
+
+    // 🔥 Ambil video sesuai kategori baru (per category list)
+    val filteredVideos = remember(searchQuery, selectedCategoryState) {
+        repo.getVideosByCategory(selectedCategoryState)
             .filter { it.title.contains(searchQuery, ignoreCase = true) }
     }
 
@@ -48,7 +50,7 @@ fun KategoriScreen(
                 title = {
                     Text(
                         text = "Kategori",
-                        color = AppDarkBlue,
+                        color = Color.White,
                         fontWeight = FontWeight.Bold
                     )
                 },
@@ -57,24 +59,27 @@ fun KategoriScreen(
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back",
-                            tint = AppDarkBlue
+                            tint = Color.White
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = AppHeaderBlue)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = PrimaryBlue)
             )
         }
     ) { paddingValues ->
+
         Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
                 .background(Color(0xFFE0F2F7))
         ) {
+
             // 🔍 Search Bar
             SearchInputField(
                 searchQuery = searchQuery,
-                onSearchChange = {searchQuery = it}
+                onSearchChange = { searchQuery = it }
             )
 
             // 🟦 Category Chips
@@ -87,15 +92,22 @@ fun KategoriScreen(
             ) {
                 repo.categories.forEach { category ->
                     FilterChip(
-                        selected = selectedCategory == category,
-                        onClick = { selectedCategory = category },
+                        selected = selectedCategoryState == category,
+                        onClick = { selectedCategoryState = category },
                         label = { Text(category) },
                         colors = FilterChipDefaults.filterChipColors(
-                            selectedContainerColor = AppChipSelectedBlue,
-                            selectedLabelColor = AppDarkBlue,
-                            containerColor = Color.White,
-                            labelColor = Color.DarkGray
-                        )
+                            selectedContainerColor = PrimaryBlue,
+                            selectedLabelColor = Color.White,
+                            containerColor = Color.Transparent,
+                            labelColor = PrimaryBlue
+                        ),
+                        border = FilterChipDefaults.filterChipBorder(
+                            borderColor = PrimaryBlue,
+                            selectedBorderColor = PrimaryBlue,
+                            enabled = true,
+                            selected = false,
+                        ),
+                        shape = RoundedCornerShape(20.dp)
                     )
                 }
             }
@@ -112,7 +124,8 @@ fun KategoriScreen(
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                        .padding(vertical = 6.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     items(filteredVideos) { video ->
@@ -124,10 +137,12 @@ fun KategoriScreen(
     }
 }
 
+
 @Preview(showBackground = true, widthDp = 360)
 @Composable
 fun KategoriScreenPreview() {
+    val repository = LocalVideoRepository
     NgajiQTheme {
-        KategoriScreen()
+        KategoriVideoPembelajaranScreen(repository, selectedCategory = "Fiqih")
     }
 }

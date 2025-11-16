@@ -14,14 +14,11 @@ fun RootNavGraph(
         navController = navController,
         startDestination = Routes.SPLASH
     ) {
-        // Splash tetap sama
         composable(Routes.SPLASH) {
             SplashScreen(
                 navController
             )
         }
-        // Ganti: sebelumnya 'navigation(route = MAIN_GRAPH) { ... }'
-        // Sekarang: satu composable yang menampilkan MainScaffold
         composable(Routes.MAIN_GRAPH) {
             MainScreen()
         }

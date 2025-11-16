@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -24,6 +25,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.ngajiq.data.model.Video
+import com.example.ngajiq.ui.theme.IceBlue
+import com.example.ngajiq.ui.theme.PrimaryBlue
 
 
 @Composable
@@ -31,10 +34,10 @@ fun VideoCard(video: Video, onVideoClick: (Video) -> Unit) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .fillMaxWidth()
+            .width(300.dp)
             .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
             .clip(RoundedCornerShape(16.dp))
-            .background(MaterialTheme.colorScheme.surface)
+            .background(IceBlue)
             .clickable { onVideoClick(video) }
     ) {
         Box(
@@ -56,7 +59,7 @@ fun VideoCard(video: Video, onVideoClick: (Video) -> Unit) {
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(8.dp)
-                    .background(Color.Black.copy(alpha = 0.6f), RoundedCornerShape(4.dp))
+                    .background(Color.Black.copy(alpha = 0.6f), RoundedCornerShape(10.dp))
                     .padding(horizontal = 6.dp, vertical = 2.dp)
             )
             // 🔢 ID indicator
@@ -68,7 +71,7 @@ fun VideoCard(video: Video, onVideoClick: (Video) -> Unit) {
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(8.dp)
-                    .background(Color.Black.copy(alpha = 0.6f), RoundedCornerShape(4.dp))
+                    .background(PrimaryBlue, RoundedCornerShape(12.dp))
                     .padding(horizontal = 6.dp, vertical = 2.dp)
             )
         }

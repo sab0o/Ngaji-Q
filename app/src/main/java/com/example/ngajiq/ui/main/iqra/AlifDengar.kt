@@ -1,8 +1,5 @@
 package com.example.ngajiq.ui.main.iqra
-
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
+//package com.example.ngajiq.ui.screen
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -15,6 +12,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,27 +26,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.ngajiq.R
 import com.example.ngajiq.ui.theme.NgajiQTheme
 
-class SpellingAlifScreen : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            NgajiQTheme {
-                SpellingScreen()
-            }
-        }
-    }
-}
-
-// 🔹 KOMPONEN UTAMA LAYAR SPELLING
+// 🔹 Ubah menjadi fungsi composable agar bisa dipanggil dari NavigationGraph
 @Composable
-fun SpellingScreen() {
-    // State untuk melacak apakah audio sudah diputar atau belum
+fun SpellingAlifScreen(navController: NavController) {
     var isAudioPlayed by remember { mutableStateOf(false) }
 
-    // Warna untuk status tombol Lanjut
+    // Warna tombol
     val disabledButtonColor = Color(0xFFE5E7EB)
     val activeButtonColor = Color(0xFF60A5FA)
     val activeTextColor = Color.White
@@ -61,40 +49,47 @@ fun SpellingScreen() {
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // --- Bagian Header ---
-        SpellingHeader(progress = 0.1f)
-        Spacer(modifier = Modifier.height(16.dp))
+        // Header
+//        SpellingHeader(progress = 0.1f)
+//        Spacer(modifier = Modifier.height(16.dp))
 
-
-
-        // --- Balon instruksi ---
+        // Balon instruksi
         Box(
             modifier = Modifier
                 .background(Color.White, RoundedCornerShape(20.dp))
                 .padding(horizontal = 24.dp, vertical = 8.dp)
         ) {
-            Text(text = "Dengarkan bunyi hurufnya!", fontSize = 16.sp, color = Color.DarkGray)
+            Text(
+                text = "Dengarkan bunyi hurufnya!",
+                fontSize = 16.sp,
+                color = Color.DarkGray
+            )
         }
+
         Spacer(modifier = Modifier.height(32.dp))
 
-        // --- Tampilan Huruf Utama ---
+        // Huruf utama
         MainLetterDisplay(
             onSpeakerClick = {
-                // TODO: Tambahkan logika untuk memutar audio di sini
-                isAudioPlayed = true // Mengubah state saat speaker ditekan
+                // TODO: tambahkan logika untuk memutar audio
+                isAudioPlayed = true
             }
         )
+
         Spacer(modifier = Modifier.height(32.dp))
 
-        // --- Ejaan Huruf ---
+        // Ejaan huruf
         LetterSpelling(letters = listOf("A", "L", "I", "F"))
 
-        Spacer(modifier = Modifier.weight(1f)) // Mendorong tombol ke bawah
+        Spacer(modifier = Modifier.weight(1f))
 
-        // --- Tombol Lanjut ---
+        // Tombol Lanjut
         Button(
-            onClick = { /* TODO: Logika lanjut ke layar berikutnya */ },
-            enabled = isAudioPlayed, // Tombol aktif jika audio sudah diputar
+            onClick = {
+                // 🔸 Navigasi ke halaman berikutnya (contoh: AlifBacaJawabScreen)
+                navController.navigate("alif_baca_jawab")
+            },
+            enabled = isAudioPlayed,
             shape = RoundedCornerShape(16.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = activeButtonColor,
@@ -114,68 +109,59 @@ fun SpellingScreen() {
     }
 }
 
-// 🔹 Header (Profil, Progress, Pause)
+// 🔹 Header
 @Composable
-fun SpellingHeader(
-    progress: Float = 0.3f,
-    onPauseClick: () -> Unit = {}
-) {
-    Column(
+fun SpellingHeader(progress: Float = 0.3f, onPauseClick: () -> Unit = {}) {
+    Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+        // Profil (emoji brokoli)
+        Box(
+            modifier = Modifier
+                .size(50.dp)
+                .background(Color(0xFF86EFAC), CircleShape),
+            contentAlignment = Alignment.Center
         ) {
-            // Foto Profil (placeholder)
+            Text("🥦", fontSize = 24.sp)
+        }
+
+        Spacer(modifier = Modifier.width(8.dp))
+
+        // Progress bar
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .height(20.dp)
+                .background(Color(0xFFBFDBFE), RoundedCornerShape(10.dp)),
+            contentAlignment = Alignment.CenterStart
+        ) {
             Box(
                 modifier = Modifier
-                    .size(50.dp)
-                    .background(Color(0xFF86EFAC), CircleShape), // Warna diubah agar sesuai gambar
-                contentAlignment = Alignment.Center
-            ) {
-                // Placeholder untuk gambar profil, bisa diganti Image
-                Text("🥦", fontSize = 24.sp)
-            }
+                    .fillMaxHeight()
+                    .fillMaxWidth(progress)
+                    .background(Color(0xFF60A5FA), RoundedCornerShape(10.dp))
+            )
+        }
 
-            Spacer(modifier = Modifier.width(8.dp))
+        Spacer(modifier = Modifier.width(8.dp))
 
-            // Progress bar
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .height(20.dp)
-                    .background(Color(0xFFBFDBFE), RoundedCornerShape(10.dp)),
-                contentAlignment = Alignment.CenterStart
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .fillMaxWidth(progress)
-                        .background(Color(0xFF60A5FA), RoundedCornerShape(10.dp))
-                )
-            }
-
-            Spacer(modifier = Modifier.width(8.dp))
-
-            // Tombol pause
-            Box(
-                modifier = Modifier
-                    .size(40.dp)
-                    .background(Color(0xFFBFDBFE), CircleShape)
-                    .clickable { onPauseClick() },
-                contentAlignment = Alignment.Center
-            ) {
-                Text("⏸️", fontSize = 18.sp)
-            }
+        // Tombol pause
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .background(Color(0xFFBFDBFE), CircleShape)
+                .clickable { onPauseClick() },
+            contentAlignment = Alignment.Center
+        ) {
+            Text("⏸️", fontSize = 18.sp)
         }
     }
 }
 
-// 🔹 Tampilan Huruf Utama dengan Tombol Speaker
+// 🔹 Huruf utama + speaker
 @Composable
 fun MainLetterDisplay(onSpeakerClick: () -> Unit) {
     val stroke = Stroke(
@@ -187,22 +173,26 @@ fun MainLetterDisplay(onSpeakerClick: () -> Unit) {
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.Top
     ) {
-        // Tombol Speaker
         IconButton(
             onClick = onSpeakerClick,
             modifier = Modifier
                 .size(50.dp)
-                .background(Color(0xFFBFDBFE), RoundedCornerShape(12.dp))
+                .background(Color(0xFF55D5FF), RoundedCornerShape(12.dp))
         ) {
 //            Icon(
 //                Icons.Filled.Notifications,
 //                contentDescription = "Dengarkan Audio",
 //                tint = Color(0xFF60A5FA)
 //            )
+            Image(
+                painter = painterResource(id = R.drawable.ic_speaker),
+                contentDescription = "Speaker",
+                modifier = Modifier.size(28.dp)
+            )
         }
+
         Spacer(modifier = Modifier.width(16.dp))
 
-        // Box dengan border putus-putus
         Box(
             modifier = Modifier
                 .weight(1f)
@@ -217,15 +207,15 @@ fun MainLetterDisplay(onSpeakerClick: () -> Unit) {
             contentAlignment = Alignment.Center
         ) {
             Image(
-                painter = painterResource(id = R.drawable.alif), // Ganti dengan nama file gambar Anda
-                contentDescription = "Alif",
-                modifier = Modifier.size(130.dp)  // Atur ukuran gambar
+                painter = painterResource(id = R.drawable.alif),
+                contentDescription = "Huruf Alif",
+                modifier = Modifier.size(130.dp)
             )
         }
     }
 }
 
-// 🔹 Komponen untuk Ejaan Huruf per Kotak
+// 🔹 Ejaan huruf
 @Composable
 fun LetterSpelling(letters: List<String>) {
     Row(
@@ -254,10 +244,12 @@ fun LetterSpelling(letters: List<String>) {
         }
     }
 }
+
 @Preview(showBackground = true)
 @Composable
-fun SpellingScreenPreview() {
+fun PreviewSpellingAlifScreen() {
     NgajiQTheme {
-        SpellingScreen()
+        // Dummy navController untuk preview
+        SpellingAlifScreen(navController = rememberNavController())
     }
 }
