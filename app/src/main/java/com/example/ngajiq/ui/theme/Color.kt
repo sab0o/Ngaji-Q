@@ -8,7 +8,7 @@ val SoftAzure = Color(0xFF68AFFF)   // medium soft blue
 val PrimaryBlue = Color(0xFF5696F5) // bright blue
 val DeepBlue = Color(0xFF297AF3)    // deeper saturated blue
 val AquaBlue = Color(0xFF49B9DE)    // aqua accent
-
+val BrightCyan = Color(0xFF55D5FF)  // new color
 
 // Dark Theme Colors (Final)
 val DarkPrimary = PrimaryBlue

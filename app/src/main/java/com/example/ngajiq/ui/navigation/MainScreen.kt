@@ -22,13 +22,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.ngajiq.data.repository.LocalVideoRepository
+import com.example.ngajiq.data.PracticeRepository
+import com.example.ngajiq.data.repository.SubjectRepository
+import com.example.ngajiq.ui.iqra.MateriScreen
 import com.example.ngajiq.ui.main.auth.LoginScreen
 import com.example.ngajiq.ui.main.auth.RegisterScreen
 import com.example.ngajiq.ui.main.home.HomeScreen
 import com.example.ngajiq.ui.main.iqra.MateriScreen
 import com.example.ngajiq.ui.main.kategori.KategoriVideoPembelajaranScreen
+import com.example.ngajiq.ui.main.practice.PracticeScreen
 import com.example.ngajiq.ui.main.profile.ProfileScreen
+import com.example.ngajiq.ui.main.subjectPembelajaran.PembelajaranScreen
 import com.example.ngajiq.ui.main.videoPembelajaran.RekomendasiVideoPembelajaranScreen
 
 sealed class BottomItem(
@@ -49,13 +53,10 @@ private val bottomItems = listOf(
     BottomItem.Profile
 )
 
-@Preview(showBackground = true)
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
-    Scaffold(
-        bottomBar = { BottomNavBar(navController) }
-    ) { padding ->
+    Scaffold() { padding ->
         Box(Modifier.padding(padding)) {
             MainNavHost(navController)
         }
@@ -94,7 +95,7 @@ private fun isTopLevelDestination(dest: NavDestination?, route: String): Boolean
 
 @Composable
 fun MainNavHost(navController: NavHostController) {
-    NavHost(navController, startDestination = Routes.LOGIN) {
+    NavHost(navController, startDestination = "${Routes.KATEGORI_SUBJECT}/Fiqih") {
         composable(Routes.HOME) { HomeScreen(navController) }
         composable(Routes.MATERI) { MateriScreen(selectedItem=1, navController) }
         composable(Routes.LOGIN) { LoginScreen(
@@ -107,17 +108,52 @@ fun MainNavHost(navController: NavHostController) {
         composable(Routes.ADD) { Text("Halaman Quiz") }
         composable(Routes.PROFILE) { ProfileScreen() }
         composable(
-            route = "${Routes.KATEGORI_VIDEO}/{categoryName}"
+            route = "${Routes.KATEGORI_SUBJECT}/{categoryName}"
         ) { backStackEntry ->
-            val categoryName = backStackEntry.arguments?.getString("categoryName") ?: ""
-            KategoriVideoPembelajaranScreen(selectedCategory = categoryName, onBackClick = { navController.popBackStack() })
+            val categoryName = backStackEntry.arguments?.getString("categoryName").orEmpty()
+            KategoriVideoPembelajaranScreen(selectedCategory = categoryName, onBackClick = { navController.popBackStack() }, navController = navController)
         }
         composable(Routes.REKOMENDASI) {
             RekomendasiVideoPembelajaranScreen(
-                repo = LocalVideoRepository,
-                onBackClick = {navController.popBackStack()}
+                repo = SubjectRepository,
+                onBackClick = {navController.popBackStack()},
+
             )
         }
+        composable(route="${Routes.PRACTICE}/{categoryName}/{practiceId}"){
+            backStackEntry ->
+            val categoryName= backStackEntry.arguments?.getString("categoryName").orEmpty()
+            val practiceId = backStackEntry.arguments?.getString("practiceId")?.toIntOrNull()
+            PracticeScreen(repo = PracticeRepository,categoryName, practiceId)
+        }
+        composable(
+            route = "${Routes.SUBJECT}/{categoryName}/{subjectId}"
+        ) { backStackEntry ->
+
+            val categoryName = backStackEntry.arguments
+                ?.getString("categoryName")
+                .orEmpty()
+
+            val subjectId = backStackEntry.arguments
+                ?.getString("subjectId")?.toIntOrNull()
+
+            PembelajaranScreen(
+                navController=navController,
+                repo = SubjectRepository,
+                category = categoryName,
+                subjectId = subjectId,
+                onBackClick = { navController.popBackStack() }
+            )
+        }
+
+
+
     }
 }
 
+
+@Preview(showBackground = true, widthDp = 360, heightDp = 800)
+@Composable
+fun MainScreenPreview() {
+    MainScreen()
+}
