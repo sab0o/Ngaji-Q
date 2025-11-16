@@ -38,7 +38,7 @@ fun DashedLetterBox(
         Image(
             painter = painterResource(id = imageRes),
             contentDescription = "Huruf",
-            modifier = Modifier.size(130.dp)
+            modifier = Modifier.size(120.dp)
         )
     }
 }

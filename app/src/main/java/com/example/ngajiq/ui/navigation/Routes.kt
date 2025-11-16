@@ -13,4 +13,5 @@ object Routes {
 
     const val REKOMENDASI = "rekomendasi"
     const val KATEGORI_VIDEO = "kategori_video"
+
 }

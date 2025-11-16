@@ -61,7 +61,7 @@ fun ListenHarakatScreen(navController: NavController) {
 
                 Box(
                     modifier = Modifier
-                        .width(130.dp)
+                        .width(150.dp)
                         .height(170.dp)
                 ) {
                     DashedLetterBox(
@@ -88,7 +88,7 @@ fun ListenHarakatScreen(navController: NavController) {
 
                 Box(
                     modifier = Modifier
-                        .width(130.dp)
+                        .width(150.dp)
                         .height(170.dp)
                 ) {
                     DashedLetterBox(
@@ -124,7 +124,7 @@ fun ListenHarakatScreen(navController: NavController) {
 
                 Box(
                     modifier = Modifier
-                        .width(130.dp)
+                        .width(150.dp)
                         .height(170.dp)
                 ) {
                     DashedLetterBox(

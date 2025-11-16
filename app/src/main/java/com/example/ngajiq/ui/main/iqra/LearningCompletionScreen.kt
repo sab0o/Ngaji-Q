@@ -179,7 +179,7 @@ fun CongratsScreen(percentage: Int) {
         Spacer(modifier = Modifier.height(50.dp))
 
         ButtonLanjut(
-            text = "Lanjut",
+            text = "SELESAI",
             onClick = { /* TODO: Navigation */ },
             buttonColor = Color(0xFF55D5FF),
             shadowColor = Color(0xFF42BBE4),
