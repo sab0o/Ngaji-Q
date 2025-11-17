@@ -1,4 +1,4 @@
-package com.example.ngajiq.ui.main.videoPembelajaran
+package com.example.ngajiq.ui.main.subjectPembelajaran
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -24,13 +24,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.ngajiq.data.model.Video
+import androidx.navigation.NavController
+import com.example.ngajiq.data.model.Subject
+import com.example.ngajiq.ui.navigation.Routes
 import com.example.ngajiq.ui.theme.IceBlue
 import com.example.ngajiq.ui.theme.PrimaryBlue
 
 
 @Composable
-fun VideoCard(video: Video, onVideoClick: (Video) -> Unit) {
+fun SubjectCard(subject: Subject, navController: NavController) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -38,7 +40,7 @@ fun VideoCard(video: Video, onVideoClick: (Video) -> Unit) {
             .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
             .clip(RoundedCornerShape(16.dp))
             .background(IceBlue)
-            .clickable { onVideoClick(video) }
+            .clickable { navController.navigate("${Routes.SUBJECT}/${subject.category}/${subject.id}") }
     ) {
         Box(
             modifier = Modifier
@@ -46,14 +48,14 @@ fun VideoCard(video: Video, onVideoClick: (Video) -> Unit) {
                 .height(180.dp)
         ) {
             Image(
-                painter = painterResource(id = video.thumbnailRes),
-                contentDescription = video.title,
+                painter = painterResource(id = subject.thumbnailRes),
+                contentDescription = subject.title,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
             )
             // 🎞 Duration
             Text(
-                text = video.duration,
+                text = subject.duration,
                 color = Color.White,
                 fontSize = 12.sp,
                 modifier = Modifier
@@ -64,7 +66,7 @@ fun VideoCard(video: Video, onVideoClick: (Video) -> Unit) {
             )
             // 🔢 ID indicator
             Text(
-                text = video.id.toString().padStart(2, '0'),
+                text = subject.id.toString().padStart(2, '0'),
                 color = Color.White,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
@@ -78,7 +80,7 @@ fun VideoCard(video: Video, onVideoClick: (Video) -> Unit) {
 
         // 📘 Title
         Text(
-            text = video.title,
+            text = subject.title,
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.padding(16.dp)
         )

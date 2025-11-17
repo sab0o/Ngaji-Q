@@ -12,6 +12,7 @@ object Routes {
     const val MAIN_GRAPH = "main_graph"
 
     const val REKOMENDASI = "rekomendasi"
-    const val KATEGORI_VIDEO = "kategori_video"
-
+    const val KATEGORI_SUBJECT = "kategori_subject"
+    const val PRACTICE = "practice"
+    const val SUBJECT = "subject"
 }
