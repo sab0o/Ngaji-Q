@@ -18,29 +18,31 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.ngajiq.R
 import com.example.ngajiq.data.repository.HurufHijaiyahRepository
 import com.example.ngajiq.ui.main.iqra.components.HijaiyahCircle
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MapIqra1(onBackClick: () -> Unit = {}) {
+fun MapIqra(id: Int?,navController: NavController) {
 
-    val list = HurufHijaiyahRepository.getIqra1List()
+    val list = HurufHijaiyahRepository.getListHurufById(id)
 
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        "Iqra 1",
+                        "Iqra $id",
                         fontSize = 25.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.White
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = onBackClick) {
+                    IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back",
@@ -90,7 +92,7 @@ fun MapIqra1(onBackClick: () -> Unit = {}) {
                     ) {
                         HijaiyahCircle(
                             item = item,
-                            onClick = {},
+                            onClick = {navController.navigate()},
                             isActive = isActive
                         )
                     }
@@ -103,5 +105,8 @@ fun MapIqra1(onBackClick: () -> Unit = {}) {
 @Preview(showBackground = true)
 @Composable
 fun PreviewMapIqra1() {
-    MapIqra1()
+    val navController = rememberNavController()
+    MapIqra(
+        1, navController,
+    )
 }

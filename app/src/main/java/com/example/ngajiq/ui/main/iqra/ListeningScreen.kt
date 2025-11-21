@@ -1,11 +1,13 @@
 package com.example.ngajiq.ui.main.iqra
 
+import android.media.MediaPlayer
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -18,77 +20,85 @@ import com.example.ngajiq.ui.main.iqra.components.SpeakerButton
 import com.example.ngajiq.ui.main.iqra.components.ProgressBar
 import com.example.ngajiq.ui.theme.*
 import com.example.ngajiq.R
+import com.example.ngajiq.data.model.HurufHijaiyah
+import com.example.ngajiq.data.repository.HurufHijaiyahRepository
 
 @Composable
-fun AlifDengarScreen(navController: NavController) {
+fun ListeningScreen(item: HurufHijaiyah, navController: NavController) {
 
-    // STATE → tombol Lanjut aktif kalau audio sudah dipencet
+    // STATE
     var isAudioPlayed by remember { mutableStateOf(false) }
+
+    // 🎵 MEDIA PLAYER (remember + cleanup)
+    val context = LocalContext.current
+    val mediaPlayer = remember {
+        MediaPlayer.create(context, item.audioRes)   // gunakan audioRes dari item
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            mediaPlayer.release() // cleanup ketika screen keluar
+        }
+    }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White) // sesuai theme
+            .background(Color.White)
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        // 🔵 Progress Bar
         ProgressBar(
             progress = 0.2f,
-            onPauseClick = { /* TODO */ }
+            onPauseClick = { }
         )
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        // 🔵 Hint Text
         HintText(
             text = "Dengarkan bunyi hurufnya!",
-            onClick = { /* TODO */ }
+            onClick = {}
         )
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        // 🔵 Huruf besar + tombol speaker dalam Box (overlap)
         Box(
             modifier = Modifier
                 .fillMaxWidth(0.7f)
-                .height(200.dp),      // bisa disesuaikan
+                .height(200.dp)
         ) {
 
-            // Kotak huruf di tengah
             DashedLetterBox(
-                imageRes = R.drawable.alif,
+                imageRes = item.imageRes,
                 modifier = Modifier
-                    .fillMaxWidth(0.7f)   // biar kotaknya tidak terlalu besar
+                    .fillMaxWidth(0.7f)
                     .align(Alignment.Center)
             )
 
-            // Speaker tombol di pojok kanan atas, overlap
             SpeakerButton(
-                onSpeakerClick = { isAudioPlayed = true },
+                onSpeakerClick = {
+                    mediaPlayer.start()   // 🔊 PLAY AUDIO
+                    isAudioPlayed = true
+                },
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .offset(x = (-10).dp, y = 10.dp)
             )
         }
 
-
-
         Spacer(modifier = Modifier.height(32.dp))
 
-        // 🔵 EJAAN
-        LetterSpelling(letters = listOf("A", "L", "I", "F"))
+        LetterSpelling(
+            letters = item.label.toCharArray().map { it.toString() }
+        )
 
         Spacer(modifier = Modifier.weight(1f))
 
-        // 🔵 Tombol LANJUT
         ButtonLanjut(
             text = "LANJUT",
             onClick = {
-                if (isAudioPlayed) {
-                    navController.navigate("alif_baca_jawab")
-                }
+                if (isAudioPlayed) navController.navigate("alif_baca_jawab")
             },
             buttonColor = if (isAudioPlayed) PrimaryBlue else Color(0xFFE5E7EB),
             shadowColor = if (isAudioPlayed) DeepBlue else Color(0xFFB0BEC5),
@@ -122,8 +132,8 @@ fun LetterSpelling(
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewAlifDengarScreen() {
+fun PreviewListeningScreen() {
     NgajiQTheme {
-        AlifDengarScreen(navController = rememberNavController())
+        ListeningScreen(HurufHijaiyahRepository.getIqra1List()[0],navController = rememberNavController())
     }
 }

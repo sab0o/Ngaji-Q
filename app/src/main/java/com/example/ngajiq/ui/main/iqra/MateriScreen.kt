@@ -2,6 +2,8 @@ package com.example.ngajiq.ui.main.iqra
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -18,12 +20,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.ngajiq.R
+import com.example.ngajiq.data.repository.IqraRepository
 import com.example.ngajiq.ui.main.iqra.components.IqraCard
+import com.example.ngajiq.ui.navigation.Routes
 import com.example.ngajiq.ui.theme.NgajiQTheme
 
 @Composable
 fun MateriScreen(selectedItem: Int, navController: NavController) {
-
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -50,74 +53,24 @@ fun MateriScreen(selectedItem: Int, navController: NavController) {
             color = Color.White,
             shadowElevation = 4.dp
         ) {
-
-            Column(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .verticalScroll(rememberScrollState())
+            Spacer(modifier = Modifier.height(34.dp))
+            LazyColumn(modifier = Modifier
+                .padding(16.dp)
             ) {
-
-                Spacer(modifier = Modifier.height(34.dp))
-
-                // Iqra 1
-                IqraCard(
-                    iqraNumber = 1,
-                    title = "Mengenal huruf hijaiyah",
-                    currentLevel = 1,
-                    totalLevel = 30,
-                    imageRes = R.drawable.iqra,   // sesuaikan nama file
-                    onClick = { navController.navigate("levelIqra1") }
-                )
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                IqraCard(
-                    iqraNumber = 2,
-                    title = "Belajar membaca kata",
-                    currentLevel = 0,
-                    totalLevel = 30,
-                    imageRes = R.drawable.iqra
-                )
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                IqraCard(
-                    iqraNumber = 3,
-                    title = "Belajar mad thabi’i",
-                    currentLevel = 0,
-                    totalLevel = 30,
-                    imageRes = R.drawable.iqra
-                )
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                IqraCard(
-                    iqraNumber = 4,
-                    title = "Mengenal tanda bacaan",
-                    currentLevel = 0,
-                    totalLevel = 30,
-                    imageRes = R.drawable.iqra
-                )
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                IqraCard(
-                    iqraNumber = 5,
-                    title = "Belajar Waqaf dan Qalqalah",
-                    currentLevel = 0,
-                    totalLevel = 30,
-                    imageRes = R.drawable.iqra
-                )
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                IqraCard(
-                    iqraNumber = 6,
-                    title = "Memahami Tajwid",
-                    currentLevel = 0,
-                    totalLevel = 30,
-                    imageRes = R.drawable.iqra
-                )
+                items(IqraRepository.iqras) { iqra ->
+                    IqraCard(
+                        iqraNumber = iqra.id,
+                        title = iqra.title,
+                        currentLevel = iqra.currentLevel,
+                        totalLevel = 30,
+                        imageRes = R.drawable.iqra,
+                        lockedState = iqra.lockedState,
+                        onClick = {
+                            navController.navigate("${Routes.MAPIQRA}/${iqra.id}")
+                        }
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                }
             }
         }
 

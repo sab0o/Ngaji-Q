@@ -23,7 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 @Composable
 fun HijaiyahCircle(
     item: HurufHijaiyah,
-    onClick: (HurufHijaiyah) -> Unit,
+    onClick: () -> Unit,
     isActive: Boolean = true
 ) {
 
@@ -31,7 +31,7 @@ fun HijaiyahCircle(
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.clickable { onClick(item) }
+        modifier = Modifier.clickable { onClick() }
     ) {
 
         // LINGKARAN 3 LAPIS

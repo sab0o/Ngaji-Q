@@ -27,7 +27,8 @@ fun IqraCard(
     currentLevel: Int,
     totalLevel: Int,
     imageRes: Int,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
+    lockedState: Boolean,
 ) {
     val percentage = (currentLevel.toFloat() / totalLevel) * 100
     Surface(
@@ -37,7 +38,7 @@ fun IqraCard(
             .clickable { onClick() },
         shape = RoundedCornerShape(20.dp),
         color = Color.White,
-        shadowElevation = 8.dp    // ⬅️ SHADOW DI SINI
+        shadowElevation = 8.dp,
     ) {
         Row(
             modifier = Modifier
@@ -46,15 +47,13 @@ fun IqraCard(
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            // LEFT SIDE (Text content)
             Column(
                 modifier = Modifier.weight(1f)
             ) {
-                // Badge “Iqra X”
                 Box(
                     modifier = Modifier
                         .clip(RoundedCornerShape(50))
-                        .background(AquaBlue)
+                        .background(if (lockedState) Color(0xFFACACAC) else AquaBlue)
                         .padding(horizontal = 16.dp, vertical = 6.dp)
                 ) {
                     Text(
@@ -67,7 +66,6 @@ fun IqraCard(
 
                 Spacer(Modifier.height(12.dp))
 
-                // Title
                 Text(
                     text = title,
                     color = Color(0xFF353535),
@@ -77,7 +75,6 @@ fun IqraCard(
 
                 Spacer(Modifier.height(6.dp))
 
-                // Level text
                 Text(
                     text = "$currentLevel/$totalLevel level",
                     color = Color(0xFF4A4A4A),
@@ -97,7 +94,7 @@ fun IqraCard(
                             .height(12.dp)
                             .weight(1f)
                             .clip(RoundedCornerShape(20.dp))
-                            .background(IceBlue.copy(alpha = 0.4f))
+                            .background(if(lockedState) Color(0xFFDFDFDF) else IceBlue.copy(alpha = 0.4f))
                     ) {
                         // Fill
                         Box(
@@ -105,7 +102,7 @@ fun IqraCard(
                                 .fillMaxHeight()
                                 .fillMaxWidth(percentage / 100)
                                 .clip(RoundedCornerShape(20.dp))
-                                .background(AquaBlue)
+                                .background(if (lockedState) Color(0xFFDFDFDF) else AquaBlue)
                         )
                     }
 
@@ -114,7 +111,7 @@ fun IqraCard(
                     Text(
                         text = "${percentage.toInt()}%",
                         fontSize = 14.sp,
-                        color = AquaBlue,
+                        color = if (lockedState) Color(0xFF7A7A7A) else AquaBlue,
                         fontWeight = FontWeight.SemiBold
                     )
                 }
