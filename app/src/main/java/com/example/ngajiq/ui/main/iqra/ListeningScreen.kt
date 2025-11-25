@@ -19,9 +19,9 @@ import com.example.ngajiq.ui.main.iqra.components.LetterBox
 import com.example.ngajiq.ui.main.iqra.components.SpeakerButton
 import com.example.ngajiq.ui.main.iqra.components.ProgressBar
 import com.example.ngajiq.ui.theme.*
-import com.example.ngajiq.R
 import com.example.ngajiq.data.model.HurufHijaiyah
 import com.example.ngajiq.data.repository.HurufHijaiyahRepository
+import com.example.ngajiq.ui.navigation.Routes
 
 @Composable
 fun ListeningScreen(item: HurufHijaiyah, navController: NavController) {
@@ -98,7 +98,8 @@ fun ListeningScreen(item: HurufHijaiyah, navController: NavController) {
         ButtonLanjut(
             text = "LANJUT",
             onClick = {
-                if (isAudioPlayed) navController.navigate("alif_baca_jawab")
+                if (isAudioPlayed) navController.navigate("writingIqra/${item.id}")
+
             },
             buttonColor = if (isAudioPlayed) PrimaryBlue else Color(0xFFE5E7EB),
             shadowColor = if (isAudioPlayed) DeepBlue else Color(0xFFB0BEC5),

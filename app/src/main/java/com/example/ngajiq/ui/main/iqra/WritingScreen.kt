@@ -12,15 +12,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import com.example.ngajiq.data.model.HurufHijaiyah
 import com.example.ngajiq.ui.main.iqra.components.*
-import com.example.ngajiq.ui.theme.AquaBlue
 import com.example.ngajiq.ui.theme.DeepBlue
 import com.example.ngajiq.ui.theme.IceBlue
 import com.example.ngajiq.ui.theme.PrimaryBlue
+import com.example.ngajiq.ui.navigation.Routes
 
 @Composable
 fun WritingScreen(
-    onNext: () -> Unit = {},
+    huruf: HurufHijaiyah,
+    iqraId: Int,
+    navController: NavHostController,
     onPauseClick: () -> Unit = {},
     onSpeakerClick: () -> Unit = {}
 ) {
@@ -97,7 +101,13 @@ fun WritingScreen(
 
         ButtonLanjut(
             text = "Lanjut",
-            onClick = onNext,
+            onClick = {
+                if (selesai) {
+                    navController.navigate(
+                        "${Routes.LISTENINGIQRA}/${iqraId}/${huruf.id}"
+                    )
+                }
+            },
             buttonColor = if (selesai) PrimaryBlue else Color(0xFFE5E7EB),
             shadowColor = if (selesai) DeepBlue else Color(0xFFB0BEC5),
             textColor = if (selesai) IceBlue else Color(0xFF9CA3AF),
@@ -109,5 +119,11 @@ fun WritingScreen(
 @Preview(showBackground = true)
 @Composable
 fun PreviewWritingSlider() {
-    WritingScreen()
+    WritingScreen(
+        huruf = TODO(),
+        navController = TODO(),
+        onPauseClick = TODO(),
+        onSpeakerClick = TODO(),
+        iqraId = TODO()
+    )
 }

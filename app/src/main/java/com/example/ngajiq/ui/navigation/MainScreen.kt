@@ -31,10 +31,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.ngajiq.data.PracticeRepository
+import com.example.ngajiq.data.model.HurufHijaiyah
+import com.example.ngajiq.data.repository.HurufHijaiyahRepository
 import com.example.ngajiq.data.repository.SubjectRepository
 import com.example.ngajiq.ui.main.auth.LoginScreen
 import com.example.ngajiq.ui.main.auth.RegisterScreen
 import com.example.ngajiq.ui.main.home.HomeScreen
+import com.example.ngajiq.ui.main.iqra.ListeningScreen
 import com.example.ngajiq.ui.main.iqra.MapIqra
 import com.example.ngajiq.ui.main.iqra.MateriScreen
 import com.example.ngajiq.ui.main.kategori.KategoriVideoPembelajaranScreen
@@ -44,6 +47,7 @@ import com.example.ngajiq.ui.main.profile.ProfileScreen
 import com.example.ngajiq.ui.main.subjectPembelajaran.PembelajaranScreen
 import com.example.ngajiq.ui.main.videoPembelajaran.RekomendasiVideoPembelajaranScreen
 import com.example.ngajiq.ui.theme.DeepBlue
+import com.example.ngajiq.ui.main.iqra.WritingScreen
 
 sealed class BottomItem(
     val route: String,
@@ -148,6 +152,48 @@ private fun isTopLevelDestination(dest: NavDestination?, route: String): Boolean
 @Composable
 fun MainNavHost(navController: NavHostController) {
     NavHost(navController, startDestination = Routes.HOME) {
+        composable("writingIqra/{hurufId}") { backStackEntry ->
+            val hurufId = backStackEntry.arguments?.getString("hurufId")!!.toInt()
+
+            var huruf: HurufHijaiyah? = null
+            var iqraFound: Int? = null
+
+            for (iqra in 1..6) {
+                val list = HurufHijaiyahRepository.getListHurufById(iqra)
+                val match = list.firstOrNull { it.id == hurufId }
+                if (match != null) {
+                    huruf = match
+                    iqraFound = iqra
+                    break
+                }
+            }
+
+            if (huruf == null || iqraFound == null) return@composable
+
+            WritingScreen(
+                huruf = huruf!!,
+                iqraId = iqraFound!!,
+                navController = navController
+            )
+        }
+
+
+        composable("${Routes.LISTENINGIQRA}/{iqraId}/{hurufId}") { backStackEntry ->
+
+            // NULL? → langsung set default
+            val iqraId = backStackEntry.arguments?.getString("iqraId")?.toIntOrNull() ?: 1
+            val hurufId = backStackEntry.arguments?.getString("hurufId")?.toIntOrNull() ?: 1
+
+            // Kalau hurufId gak ada di IQRA tsb, Fallback ke index pertama
+            val listHuruf = HurufHijaiyahRepository.getListHurufById(iqraId)
+            val huruf = listHuruf.firstOrNull { it.id == hurufId } ?: listHuruf.first()
+
+            // GAS masuk layar
+            ListeningScreen(huruf, navController)
+        }
+
+
+
         composable(Routes.HOME) { HomeScreen(navController) }
         composable(Routes.MATERI) { MateriScreen(selectedItem=1, navController) }
         composable(Routes.LOGIN) { LoginScreen(

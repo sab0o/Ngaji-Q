@@ -23,6 +23,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.ngajiq.R
 import com.example.ngajiq.data.repository.HurufHijaiyahRepository
 import com.example.ngajiq.ui.main.iqra.components.HijaiyahCircle
+import com.example.ngajiq.ui.navigation.Routes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -92,7 +93,8 @@ fun MapIqra(id: Int?,navController: NavController) {
                     ) {
                         HijaiyahCircle(
                             item = item,
-                            onClick = {navController.navigate()},
+                            onClick = {navController.navigate("listeningIqra/$id/${item.id}")
+                            },
                             isActive = isActive
                         )
                     }
