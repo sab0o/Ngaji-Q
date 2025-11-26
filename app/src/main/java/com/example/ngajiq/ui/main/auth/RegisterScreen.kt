@@ -1,5 +1,6 @@
 package com.example.ngajiq.ui.main.auth
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -9,9 +10,11 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
@@ -19,16 +22,67 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.rememberNavController
 import com.example.ngajiq.ui.common.CustomTextField
 import com.example.ngajiq.ui.common.GoogleButton
 import com.example.ngajiq.ui.common.PrimaryButton
 import com.example.ngajiq.R
+import com.example.ngajiq.data.viewmodel.AuthViewModel
+import com.example.ngajiq.ui.navigation.Routes
 
-
-
+// ---------------------------------------------------------
+// 1. STATEFUL COMPOSABLE (Logic, ViewModel, Validation)
+// ---------------------------------------------------------
 @Composable
 fun RegisterScreen(
-    onRegisterClick: () -> Unit
+    onNavigateToLogin: () -> Unit,
+    onNavigateToHome: () -> Unit,
+    authViewModel: AuthViewModel = viewModel()
+) {
+    val firebaseUser by authViewModel.userLiveData.observeAsState()
+    val toastMsg by authViewModel.toastMessage.observeAsState()
+    val context = LocalContext.current
+
+    // 1. Listen for Register Success
+    LaunchedEffect(firebaseUser) {
+        if (firebaseUser != null) {
+            onNavigateToHome()
+        }
+    }
+
+    // 2. Listen for Errors/Messages
+    LaunchedEffect(toastMsg) {
+        toastMsg?.let {
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            authViewModel.clearToast()
+        }
+    }
+
+    // 3. Render the UI
+    RegisterContent(
+        onRegisterClick = { username, email, password, confirmPassword ->
+            // Perform Validation Logic Here
+            if (password != confirmPassword) {
+                Toast.makeText(context, "Kata sandi tidak cocok", Toast.LENGTH_SHORT).show()
+            } else {
+                // Call the ViewModel to register
+                authViewModel.register(email, password)
+            }
+        },
+        onNavigateToLogin = onNavigateToLogin,
+        onGoogleClick = { /* TODO: Google Auth */ }
+    )
+}
+
+// ---------------------------------------------------------
+// 2. STATELESS COMPOSABLE (UI Only - Safe for Preview)
+// ---------------------------------------------------------
+@Composable
+fun RegisterContent(
+    onRegisterClick: (String, String, String, String) -> Unit, // username, email, pass, confirm
+    onNavigateToLogin: () -> Unit,
+    onGoogleClick: () -> Unit
 ) {
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -44,15 +98,13 @@ fun RegisterScreen(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // 1. Header Section
+            // --- Header Section ---
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
                 contentAlignment = Alignment.Center
             ) {
-
-                // Column for centered texts
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
                         text = "Yuk Teman-Teman",
@@ -60,7 +112,6 @@ fun RegisterScreen(
                         fontWeight = FontWeight.Bold,
                         color = Color.Black
                     )
-
                     Text(
                         text = "Gabung Bersama Kami",
                         fontSize = 22.sp,
@@ -68,30 +119,26 @@ fun RegisterScreen(
                         color = Color.White
                     )
                 }
-
-                // Freely movable image
                 Image(
                     painter = painterResource(id = R.drawable.ngaji_header),
                     contentDescription = "Ngaji-Q Header",
                     modifier = Modifier
                         .height(120.dp)
-                        .align(Alignment.BottomCenter)   // <--- change this to anywhere
-                    //.offset(y = 20.dp)              // <--- fine-tuning movement
+                        .align(Alignment.BottomCenter)
                 )
             }
 
-
-            // 2. Form Section
+            // --- Form Section ---
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(2.5f) // Give more weight for more fields
+                    .weight(2.5f)
                     .background(
                         Color.White,
                         shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)
                     )
                     .padding(24.dp)
-                    .verticalScroll(rememberScrollState()), // Make form scrollable
+                    .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Spacer(Modifier.height(16.dp))
@@ -122,9 +169,16 @@ fun RegisterScreen(
                 )
                 Spacer(Modifier.height(24.dp))
 
-                PrimaryButton(text = "DAFTAR", onClick = { /* TODO: Handle Register */ })
+                // Register Button connected to logic
+                PrimaryButton(
+                    text = "DAFTAR",
+                    onClick = {
+                        onRegisterClick(username, email, password, confirmPassword)
+                    }
+                )
                 Spacer(Modifier.height(16.dp))
-                GoogleButton(onClick = { /* TODO: Handle Google Sign-In */ })
+
+                GoogleButton(onClick = { onGoogleClick() })
                 Spacer(Modifier.height(24.dp))
 
                 // Login Link
@@ -137,17 +191,25 @@ fun RegisterScreen(
                             fontWeight = FontWeight.Bold,
                             fontSize = 14.sp
                         ),
-                        onClick = { onRegisterClick() }
+                        onClick = { onNavigateToLogin() }
                     )
                 }
-                Spacer(Modifier.height(16.dp)) // Extra space for scroll
+                Spacer(Modifier.height(16.dp))
             }
         }
     }
 }
 
+// ---------------------------------------------------------
+// 3. PREVIEW (Uses Stateless Content)
+// ---------------------------------------------------------
 @Preview(showBackground = true)
 @Composable
 fun RegisterScreenPreview() {
-    RegisterScreen({})
+    var navController = rememberNavController()
+    RegisterContent(
+        onRegisterClick = { _, _, _, _ -> },
+        onNavigateToLogin = {navController.navigate(Routes.LOGIN)},
+        onGoogleClick = {}
+    )
 }

@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,14 +28,24 @@ import com.example.ngajiq.ui.main.home.components.CategoryItem
 import com.example.ngajiq.ui.main.home.components.HeaderSection
 import com.example.ngajiq.ui.main.home.components.RecommendationItem
 import com.example.ngajiq.ui.main.home.components.SearchBarSection
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun HomeScreen(navController: NavHostController) {
+    val auth = FirebaseAuth.getInstance()
+    val currentUser = auth.currentUser
+
+    val username = remember {
+        currentUser?.displayName?.ifBlank { null }
+            ?: currentUser?.email?.substringBefore("@")
+            ?: "Teman Ngaji"
+    }
     val categories: List<Category> = HomeRepository.getCategories()
     val recommendations: List<Recommendation> = HomeRepository.getRecommendations()
     val featuredCard: Recommendation = HomeRepository.getFeaturedCard()
 
     HomeScreenContent(
+        username,
         categories = categories,
         recommendations = recommendations,
         featuredCard = featuredCard,
@@ -45,6 +56,7 @@ fun HomeScreen(navController: NavHostController) {
 
 @Composable
 fun HomeScreenContent(
+    username: String,
     categories: List<Category>,
     recommendations: List<Recommendation>,
     featuredCard: Recommendation,
@@ -62,7 +74,7 @@ fun HomeScreenContent(
     ) {
 
         // HEADER
-        HeaderSection()
+        HeaderSection(username)
 
         // WHITE CARD CONTAINER
         Column(

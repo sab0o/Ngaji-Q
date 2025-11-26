@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "259352907694",
+    "project_id": "ngajiq-3e269",
+    "storage_bucket": "ngajiq-3e269.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:259352907694:android:868805804737fb43df423f",
+        "android_client_info": {
+          "package_name": "com.example.ngajiq"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKAa_QCWSqIcIkNrQagzkv-NXoETU8oHk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

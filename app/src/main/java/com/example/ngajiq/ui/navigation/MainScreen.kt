@@ -154,20 +154,7 @@ private fun isTopLevelDestination(dest: NavDestination?, route: String): Boolean
 
 @Composable
 fun MainNavHost(navController: NavHostController) {
-    NavHost(navController, startDestination = Routes.HOME) {
-        composable(Routes.LEARNINGCOMPLETION) {
-
-            LearningCompletionScreen(1,0,)
-        }
-        composable("flashCard") {
-            FlashcardScreen(navController)
-        }
-        composable(Routes.LISTENINGANDANSWERIQRA){
-            AlifJawabScreen(navController)
-        }
-        composable("listeningHarakatIqra"){
-            ListenHarakatScreen(navController)
-        }
+    NavHost(navController, startDestination = Routes.LOGIN) {
         composable("writingIqra/{hurufId}") { backStackEntry ->
             val hurufId = backStackEntry.arguments?.getString("hurufId")!!.toInt()
 
@@ -208,16 +195,19 @@ fun MainNavHost(navController: NavHostController) {
             ListeningScreen(huruf, navController)
         }
 
-    
+
 
         composable(Routes.HOME) { HomeScreen(navController) }
         composable(Routes.MATERI) { MateriScreen(selectedItem=1, navController) }
         composable(Routes.LOGIN) { LoginScreen(
-            onLoginClick = { navController.navigate(Routes.HOME) },
-            onForgotPasswordClick = { navController.navigate(Routes.HOME) }
+            onNavigateToRegister= {navController.navigate(Routes.REGISTER)},
+            onNavigateToHome = {navController.navigate(Routes.HOME)}
+
+
         ) }
         composable(Routes.REGISTER) { RegisterScreen(
-            onRegisterClick = { navController.navigate(Routes.HOME) }
+            onNavigateToLogin = { navController.navigate(Routes.LOGIN) },
+            onNavigateToHome = {navController.navigate(Routes.HOME)}
         )}
         composable(Routes.CARINGAJI) { MapsScreen() }
         composable(Routes.PROFILE) { ProfileScreen() }
@@ -271,7 +261,6 @@ fun MainNavHost(navController: NavHostController) {
 
     }
 }
-
 
 
 @Preview(showBackground = true, widthDp = 360, heightDp = 800)

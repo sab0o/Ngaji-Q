@@ -1,5 +1,6 @@
 package com.example.ngajiq.ui.main.auth
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -7,9 +8,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
@@ -18,23 +21,74 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.ngajiq.R
+import com.example.ngajiq.data.viewmodel.AuthViewModel
 import com.example.ngajiq.ui.common.CustomTextField
 import com.example.ngajiq.ui.common.GoogleButton
 import com.example.ngajiq.ui.common.PrimaryButton
-import com.example.ngajiq.R
 
 // Define your app's colors
-val AppLightBlue = Color(0xFF5696F5) // Background
+val AppLightBlue = Color(0xFF5696F5)
 val AppButtonBlue = Color(0xFF4FC3F7)
 val AppTextLinkBlue = Color(0xFF03A9F4)
 
+// ---------------------------------------------------------
+// 1. STATEFUL COMPOSABLE (Handles Logic & Data)
+// Use this inside your Navigation Graph
+// ---------------------------------------------------------
 @Composable
 fun LoginScreen(
-    onLoginClick: () -> Unit,
+    onNavigateToRegister: () -> Unit,
+    onNavigateToHome: () -> Unit,
+    authViewModel: AuthViewModel = viewModel()
+) {
+    val context = LocalContext.current
+
+    // OBSERVING STATE
+    val firebaseUser by authViewModel.userLiveData.observeAsState()
+    val toastMsg by authViewModel.toastMessage.observeAsState()
+
+    // Listen for Login Success
+    LaunchedEffect(firebaseUser) {
+        if (firebaseUser != null) {
+            onNavigateToHome()
+        }
+    }
+
+    // Listen for Errors/Messages
+    LaunchedEffect(toastMsg) {
+        toastMsg?.let {
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            authViewModel.clearToast()
+        }
+    }
+
+    // Pass logic to the stateless content
+    LoginContent(
+        onLoginClick = { email, pass ->
+            authViewModel.login(email, pass)
+        },
+        onNavigateToRegister = onNavigateToRegister,
+        onGoogleClick = { /* TODO */ },
+        onForgotPasswordClick = { /* TODO */ }
+    )
+}
+
+// ---------------------------------------------------------
+// 2. STATELESS COMPOSABLE (Handles UI Only)
+// Use this for the Preview
+// ---------------------------------------------------------
+@Composable
+fun LoginContent(
+    onLoginClick: (String, String) -> Unit,
+    onNavigateToRegister: () -> Unit,
+    onGoogleClick: () -> Unit,
     onForgotPasswordClick: () -> Unit
 ) {
-    var username by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    // These states are strictly for the UI text fields
+    var emailInput by remember { mutableStateOf("") }
+    var passwordInput by remember { mutableStateOf("") }
     var rememberMe by remember { mutableStateOf(false) }
 
     Box(
@@ -46,7 +100,7 @@ fun LoginScreen(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // 1. Header Section
+            // --- Header Section ---
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -54,20 +108,20 @@ fun LoginScreen(
                 contentAlignment = Alignment.Center
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    // Note: Replace 'R.drawable.ngaji_header' with your actual image asset
+                    // Make sure this drawable exists, otherwise Preview will show empty space
                     Image(
                         painter = painterResource(id = R.drawable.ngaji_header),
                         contentDescription = "Ngaji-Q Header",
-                        modifier = Modifier.height(120.dp) // Adjust size as needed
+                        modifier = Modifier.height(120.dp)
                     )
                     Spacer(Modifier.height(16.dp))
-                    Box(){
+                    Box {
                         Text(
                             text = "Selamat datang",
                             fontSize = 32.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Color.Black
-                            ,modifier=Modifier.padding(5.dp),
+                            color = Color.Black,
+                            modifier = Modifier.padding(5.dp),
                         )
                         Spacer(Modifier.height(40.dp))
                         Text(
@@ -75,17 +129,15 @@ fun LoginScreen(
                             fontSize = 44.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.White,
-                            modifier=Modifier
-                                .padding(top=20.dp)
+                            modifier = Modifier
+                                .padding(top = 20.dp)
                                 .align(Alignment.BottomCenter)
-
                         )
                     }
-
                 }
             }
 
-            // 2. Form Section
+            // --- Form Section ---
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -98,20 +150,25 @@ fun LoginScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Spacer(Modifier.height(16.dp))
-                Text("Nama Pengguna", fontWeight = FontWeight.Bold, fontSize=20.sp , modifier = Modifier.fillMaxWidth())
+
+                // Changed "Nama Pengguna" to "Email" because Firebase requires Email
+                Text("Email", fontWeight = FontWeight.Bold, fontSize = 20.sp, modifier = Modifier.fillMaxWidth())
                 CustomTextField(
-                    label = "Nama Pengguna",
-                    value = username,
-                    onValueChange = { username = it }
+                    label = "Masukkan Email",
+                    value = emailInput,
+                    onValueChange = { emailInput = it }
                 )
+
                 Spacer(Modifier.height(16.dp))
-                Text("Kata Sandi", textAlign = TextAlign.Left, fontWeight = FontWeight.Bold, fontSize=20.sp , modifier = Modifier.fillMaxWidth() )
+
+                Text("Kata Sandi", textAlign = TextAlign.Left, fontWeight = FontWeight.Bold, fontSize = 20.sp, modifier = Modifier.fillMaxWidth())
                 CustomTextField(
                     label = "Kata Sandi",
-                    value = password,
-                    onValueChange = { password = it },
+                    value = passwordInput,
+                    onValueChange = { passwordInput = it },
                     isPassword = true
                 )
+
                 Spacer(Modifier.height(16.dp))
 
                 // Remember Me & Forgot Password
@@ -136,9 +193,14 @@ fun LoginScreen(
                 }
                 Spacer(Modifier.height(24.dp))
 
-                PrimaryButton(text = "MASUK", onClick = { /* TODO: Handle Login */ })
+                // Buttons
+                PrimaryButton(
+                    text = "MASUK",
+                    onClick = { onLoginClick(emailInput, passwordInput) }
+                )
                 Spacer(Modifier.height(16.dp))
-                GoogleButton(onClick = { /* TODO: Handle Google Sign-In */ })
+
+                GoogleButton(onClick = { onGoogleClick() })
                 Spacer(Modifier.height(24.dp))
 
                 // Register Link
@@ -151,7 +213,7 @@ fun LoginScreen(
                             fontWeight = FontWeight.Bold,
                             fontSize = 14.sp
                         ),
-                        onClick = { onLoginClick() }
+                        onClick = { onNavigateToRegister() }
                     )
                 }
             }
@@ -159,10 +221,18 @@ fun LoginScreen(
     }
 }
 
-
-
+// ---------------------------------------------------------
+// 3. PREVIEW (Uses Stateless Content)
+// This will now render without crashing
+// ---------------------------------------------------------
 @Preview(showBackground = true)
 @Composable
 fun LoginScreenPreview() {
-    LoginScreen({}, {})
+    // We pass empty lambdas because we don't need logic in the preview
+    LoginContent(
+        onLoginClick = { _, _ -> },
+        onNavigateToRegister = {},
+        onGoogleClick = {},
+        onForgotPasswordClick = {}
+    )
 }

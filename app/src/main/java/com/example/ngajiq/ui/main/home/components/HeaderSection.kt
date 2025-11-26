@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun HeaderSection() {
+fun HeaderSection(username: String) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -89,7 +89,7 @@ fun HeaderSection() {
                     color = Color.White
                 )
                 Text(
-                    text = "Abd. Muiz",
+                    text = username,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White
