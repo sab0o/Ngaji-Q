@@ -15,16 +15,21 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.ngajiq.R
 import com.example.ngajiq.ui.main.iqra.components.ButtonLanjut
 import com.example.ngajiq.ui.main.iqra.components.ButtonReview
 import com.example.ngajiq.ui.main.iqra.components.PercentageCircle
 import com.example.ngajiq.ui.main.iqra.components.ScoreBox
 import com.example.ngajiq.ui.main.iqra.components.StarRating
+import com.example.ngajiq.ui.navigation.Routes
+import androidx.navigation.compose.rememberNavController
+
 
 
 @Composable
 fun LearningCompletionScreen(
+    navController: NavController,
     correct: Int = 1,
     incorrect: Int = 0,
     onReview: () -> Unit = {}
@@ -35,7 +40,8 @@ fun LearningCompletionScreen(
     if (showCongrats) {
         CongratsScreen(
             percentage = if (correct + incorrect == 0) 0
-            else ((correct.toFloat() / (correct + incorrect)) * 100).toInt()
+            else ((correct.toFloat() / (correct + incorrect)) * 100).toInt(),
+            navController = navController
         )
     } else {
         ResultScreen(
@@ -120,7 +126,8 @@ fun ResultScreen(
 }
 
 @Composable
-fun CongratsScreen(percentage: Int) {
+fun CongratsScreen(percentage: Int,navController: NavController) {
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -180,7 +187,9 @@ fun CongratsScreen(percentage: Int) {
 
         ButtonLanjut(
             text = "SELESAI",
-            onClick = { /* TODO: Navigation */ },
+            onClick = {
+                navController.navigate(Routes.HOME);
+            },
             buttonColor = Color(0xFF55D5FF),
             shadowColor = Color(0xFF42BBE4),
             textColor = Color.White,
@@ -193,6 +202,7 @@ fun CongratsScreen(percentage: Int) {
 @Composable
 fun PreviewLearningCompletion() {
     LearningCompletionScreen(
+        navController = rememberNavController(),
         correct = 3,
         incorrect = 1
     )
@@ -202,6 +212,7 @@ fun PreviewLearningCompletion() {
 @Composable
 fun PreviewCongratsScreen() {
     CongratsScreen(
-        percentage = 80
+        percentage = 80,
+        navController = rememberNavController()
     )
 }

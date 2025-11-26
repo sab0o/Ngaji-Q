@@ -23,4 +23,6 @@ object Routes {
     const val LISTENINGANDANSWERIQRA ="listeningAndAnswerIqra"
     const val FLASHCARD = "flashCard"
     const val LEARNINGCOMPLETION = "learningCompletion"
+    const val KATEGORISCREEN="kategoriScreen"
+    const val REKOMENDASISCREEN="rekomendasiScreen"
 }

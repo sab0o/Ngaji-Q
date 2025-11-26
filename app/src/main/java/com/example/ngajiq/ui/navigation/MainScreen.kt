@@ -41,7 +41,7 @@ import com.example.ngajiq.ui.main.iqra.ListenHarakatScreen
 import com.example.ngajiq.ui.main.iqra.ListeningScreen
 import com.example.ngajiq.ui.main.iqra.MapIqra
 import com.example.ngajiq.ui.main.iqra.MateriScreen
-import com.example.ngajiq.ui.main.kategori.KategoriVideoPembelajaranScreen
+import com.example.ngajiq.ui.main.videoPembelajaran.KategoriVideoPembelajaranScreen
 import com.example.ngajiq.ui.main.maps.MapsScreen
 import com.example.ngajiq.ui.main.practice.PracticeScreen
 import com.example.ngajiq.ui.main.profile.ProfileScreen
@@ -52,6 +52,7 @@ import com.example.ngajiq.ui.main.iqra.WritingScreen
 import com.example.ngajiq.ui.main.iqra.AlifJawabScreen
 import com.example.ngajiq.ui.main.iqra.LearningCompletionScreen
 import com.example.ngajiq.ui.main.iqra.FlashcardScreen
+
 sealed class BottomItem(
     val route: String,
     val label: String,
@@ -155,9 +156,18 @@ private fun isTopLevelDestination(dest: NavDestination?, route: String): Boolean
 @Composable
 fun MainNavHost(navController: NavHostController) {
     NavHost(navController, startDestination = Routes.HOME) {
+        composable(Routes.REKOMENDASISCREEN){
+            RekomendasiVideoPembelajaranScreen(
+                repo = SubjectRepository,
+                onBackClick = { navController.popBackStack() }
+            )
+        }
+        composable(Routes.KATEGORISCREEN){
+            KategoriVideoPembelajaranScreen(navController = navController)
+        }
         composable(Routes.LEARNINGCOMPLETION) {
 
-            LearningCompletionScreen(1,0,)
+            LearningCompletionScreen(navController,1)
         }
         composable("flashCard") {
             FlashcardScreen(navController)

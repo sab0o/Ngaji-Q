@@ -1,4 +1,4 @@
-package com.example.ngajiq.ui.main.kategori
+package com.example.ngajiq.ui.main.videoPembelajaran
 
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
@@ -15,7 +15,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.ngajiq.data.model.Subject
 import com.example.ngajiq.data.repository.SubjectRepository
 import com.example.ngajiq.ui.common.SearchInputField
 import com.example.ngajiq.ui.main.kategori.components.VideoPembelajaranScaffold

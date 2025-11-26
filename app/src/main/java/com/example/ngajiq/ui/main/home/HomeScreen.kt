@@ -27,6 +27,9 @@ import com.example.ngajiq.ui.main.home.components.CategoryItem
 import com.example.ngajiq.ui.main.home.components.HeaderSection
 import com.example.ngajiq.ui.main.home.components.RecommendationItem
 import com.example.ngajiq.ui.main.home.components.SearchBarSection
+import com.example.ngajiq.ui.navigation.Routes
+import com.example.ngajiq.ui.main.videoPembelajaran.KategoriVideoPembelajaranScreen
+
 
 @Composable
 fun HomeScreen(navController: NavHostController) {
@@ -38,9 +41,11 @@ fun HomeScreen(navController: NavHostController) {
         categories = categories,
         recommendations = recommendations,
         featuredCard = featuredCard,
-        onCategoryClick = { /* TODO */ },
-        onRecommendationClick = { /* TODO */ }
-    )
+        onCategoryClick ={ navController.navigate(Routes.KATEGORISCREEN)}
+        ,
+        onRecommendationClick = {
+            navController.navigate(Routes.REKOMENDASISCREEN)
+        }    )
 }
 
 @Composable
