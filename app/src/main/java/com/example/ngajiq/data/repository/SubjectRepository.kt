@@ -69,6 +69,9 @@ object SubjectRepository {
     fun getSubjectFromCategory(category: String, subjectId: Int?): Subject? {
         return getSubjectsByCategory(category).find { it.id == subjectId }
     }
+    fun getRandomSubjects(limit: Int = 5): List<Subject> {
+        return subjects.shuffled().take(limit)
+    }
 }
 
 

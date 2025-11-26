@@ -218,16 +218,19 @@ fun MainNavHost(navController: NavHostController) {
             ListeningScreen(huruf, navController)
         }
 
-    
+
 
         composable(Routes.HOME) { HomeScreen(navController) }
         composable(Routes.MATERI) { MateriScreen(selectedItem=1, navController) }
         composable(Routes.LOGIN) { LoginScreen(
-            onLoginClick = { navController.navigate(Routes.HOME) },
-            onForgotPasswordClick = { navController.navigate(Routes.HOME) }
+            onNavigateToRegister= {navController.navigate(Routes.REGISTER)},
+            onNavigateToHome = {navController.navigate(Routes.HOME)}
+
+
         ) }
         composable(Routes.REGISTER) { RegisterScreen(
-            onRegisterClick = { navController.navigate(Routes.HOME) }
+            onNavigateToLogin = { navController.navigate(Routes.LOGIN) },
+            onNavigateToHome = {navController.navigate(Routes.HOME)}
         )}
         composable(Routes.CARINGAJI) { MapsScreen() }
         composable(Routes.PROFILE) { ProfileScreen() }
@@ -276,16 +279,6 @@ fun MainNavHost(navController: NavHostController) {
             MapIqra(iqraId, navController)
         }
 
-
-
-
     }
 }
 
-
-
-@Preview(showBackground = true, widthDp = 360, heightDp = 800)
-@Composable
-fun MainScreenPreview() {
-    MainScreen()
-}

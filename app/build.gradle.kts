@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -59,9 +60,15 @@ dependencies {
     implementation("com.google.maps.android:maps-compose:2.11.4")
     implementation("com.google.android.gms:play-services-maps:18.2.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
+    implementation("androidx.compose.runtime:runtime-livedata:1.6.0")
     implementation(libs.play.services.maps)
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.runtime)
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.auth)
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
