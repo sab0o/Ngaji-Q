@@ -155,7 +155,7 @@ private fun isTopLevelDestination(dest: NavDestination?, route: String): Boolean
 
 @Composable
 fun MainNavHost(navController: NavHostController) {
-    NavHost(navController, startDestination = Routes.HOME) {
+    NavHost(navController, startDestination = Routes.LOGIN) {
         composable(Routes.REKOMENDASISCREEN){
             RekomendasiVideoPembelajaranScreen(
                 repo = SubjectRepository,
