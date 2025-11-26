@@ -37,6 +37,7 @@ import com.example.ngajiq.data.repository.SubjectRepository
 import com.example.ngajiq.ui.main.auth.LoginScreen
 import com.example.ngajiq.ui.main.auth.RegisterScreen
 import com.example.ngajiq.ui.main.home.HomeScreen
+import com.example.ngajiq.ui.main.iqra.ListenHarakatScreen
 import com.example.ngajiq.ui.main.iqra.ListeningScreen
 import com.example.ngajiq.ui.main.iqra.MapIqra
 import com.example.ngajiq.ui.main.iqra.MateriScreen
@@ -48,7 +49,9 @@ import com.example.ngajiq.ui.main.subjectPembelajaran.PembelajaranScreen
 import com.example.ngajiq.ui.main.videoPembelajaran.RekomendasiVideoPembelajaranScreen
 import com.example.ngajiq.ui.theme.DeepBlue
 import com.example.ngajiq.ui.main.iqra.WritingScreen
-
+import com.example.ngajiq.ui.main.iqra.AlifJawabScreen
+import com.example.ngajiq.ui.main.iqra.LearningCompletionScreen
+import com.example.ngajiq.ui.main.iqra.FlashcardScreen
 sealed class BottomItem(
     val route: String,
     val label: String,
@@ -152,6 +155,19 @@ private fun isTopLevelDestination(dest: NavDestination?, route: String): Boolean
 @Composable
 fun MainNavHost(navController: NavHostController) {
     NavHost(navController, startDestination = Routes.HOME) {
+        composable(Routes.LEARNINGCOMPLETION) {
+
+            LearningCompletionScreen(1,0,)
+        }
+        composable("flashCard") {
+            FlashcardScreen(navController)
+        }
+        composable(Routes.LISTENINGANDANSWERIQRA){
+            AlifJawabScreen(navController)
+        }
+        composable("listeningHarakatIqra"){
+            ListenHarakatScreen(navController)
+        }
         composable("writingIqra/{hurufId}") { backStackEntry ->
             val hurufId = backStackEntry.arguments?.getString("hurufId")!!.toInt()
 
@@ -192,7 +208,7 @@ fun MainNavHost(navController: NavHostController) {
             ListeningScreen(huruf, navController)
         }
 
-
+    
 
         composable(Routes.HOME) { HomeScreen(navController) }
         composable(Routes.MATERI) { MateriScreen(selectedItem=1, navController) }
@@ -255,6 +271,7 @@ fun MainNavHost(navController: NavHostController) {
 
     }
 }
+
 
 
 @Preview(showBackground = true, widthDp = 360, heightDp = 800)

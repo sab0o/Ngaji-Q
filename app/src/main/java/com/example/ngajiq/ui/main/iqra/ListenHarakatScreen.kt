@@ -156,7 +156,7 @@ fun ListenHarakatScreen(navController: NavController) {
             text = "LANJUT",
             onClick = {
                 if (allPlayed) {
-                    navController.navigate("alif_baca_jawab")
+                    navController.navigate("listeningAndAnswerIqra")
                 }
             },
             buttonColor = if (allPlayed) PrimaryBlue else Color(0xFFE5E7EB),

@@ -17,6 +17,7 @@ import com.example.ngajiq.ui.main.iqra.components.ProgressBar
 import com.example.ngajiq.ui.theme.*
 import com.example.ngajiq.data.repository.FlashcardRepository
 import com.example.ngajiq.data.repository.FlashcardData
+import com.example.ngajiq.ui.navigation.Routes
 
 @Composable
 fun FlashcardScreen(navController: NavController) {
@@ -81,7 +82,7 @@ fun FlashcardScreen(navController: NavController) {
                         isDetailShown = false
                     } else {
                         // sudah di kartu terakhir; arahkan sesuai alur aplikasi (mis. ke alif_baca_jawab)
-                        navController.navigate("alif_baca_jawab")
+                        navController.navigate(Routes.LEARNINGCOMPLETION)
                     }
                 }
             },

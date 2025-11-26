@@ -13,6 +13,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.ngajiq.ui.main.iqra.components.*
 import com.example.ngajiq.ui.theme.*
 import com.example.ngajiq.R
+import com.example.ngajiq.ui.navigation.Routes
 
 @Composable
 fun AlifJawabScreen(navController: NavController) {
@@ -105,7 +106,7 @@ fun AlifJawabScreen(navController: NavController) {
                 JawabanBenar(
                     onLanjutClick = {
                         showJawabanBenar = false
-                        navController.navigate("halaman_selanjutnya")
+                        navController.navigate(Routes.FLASHCARD)
                     },
                     modifier = Modifier.fillMaxWidth(0.9f)
                 )

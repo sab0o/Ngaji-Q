@@ -104,7 +104,7 @@ fun WritingScreen(
             onClick = {
                 if (selesai) {
                     navController.navigate(
-                        "${Routes.LISTENINGIQRA}/${iqraId}/${huruf.id}"
+                        "${Routes.LISTENINGHARAKATIQRA}"
                     )
                 }
             },
