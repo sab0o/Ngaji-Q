@@ -4,6 +4,8 @@ import androidx.compose.ui.graphics.Color
 import com.example.ngajiq.R
 import com.example.ngajiq.data.model.Category
 import com.example.ngajiq.data.model.Recommendation
+import com.example.ngajiq.data.model.Subject
+import com.example.ngajiq.data.repository.SubjectRepository.getRandomSubjects
 
 object HomeRepository {
 
@@ -18,13 +20,8 @@ object HomeRepository {
         )
     }
 
-    fun getRecommendations(): List<Recommendation> {
-        return listOf(
-            // These MUST not use home1..home6 (you asked). Use different drawables in res/drawable.
-            Recommendation(1, "Belajar Wudhu' Materi 01", "10:30", R.drawable.rec1, 0.5f),
-            Recommendation(2, "Shalat Sunnah Tahajjud", "12:05", R.drawable.rec2, 0.8f),
-            Recommendation(3, "Cara Berpuasa yang Benar", "08:45", R.drawable.rec3, 0.3f)
-        )
+    fun getRecommendations(): List<Subject> {
+        return getRandomSubjects(limit=5)
     }
 
     fun getFeaturedCard(): Recommendation {

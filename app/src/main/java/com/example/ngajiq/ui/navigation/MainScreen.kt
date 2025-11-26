@@ -256,15 +256,6 @@ fun MainNavHost(navController: NavHostController) {
             MapIqra(iqraId, navController)
         }
 
-
-
-
     }
 }
 
-
-@Preview(showBackground = true, widthDp = 360, heightDp = 800)
-@Composable
-fun MainScreenPreview() {
-    MainScreen()
-}

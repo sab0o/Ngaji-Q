@@ -22,9 +22,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.ngajiq.data.model.Subject
 import com.example.ngajiq.ui.navigation.Routes
 import com.example.ngajiq.ui.theme.IceBlue
@@ -84,5 +86,27 @@ fun SubjectCard(subject: Subject, navController: NavController) {
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.padding(16.dp)
         )
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, name = "Long Title Preview")
+@Composable
+fun SubjectCardLongTitlePreview() {
+    val navController = rememberNavController()
+    val dummySubject = Subject(
+        id = 12,
+        title = "Pembelajaran Fiqih Lanjutan: Memahami Rukun dan Syarat Sah Sholat Wajib Bagi Pemula",
+        thumbnailRes = android.R.drawable.ic_menu_gallery,
+        category = "Fiqih",
+        duration = "25:00"
+    )
+
+    MaterialTheme {
+        Box(modifier = Modifier.padding(24.dp)) {
+            SubjectCard(
+                subject = dummySubject,
+                navController = navController
+            )
+        }
     }
 }

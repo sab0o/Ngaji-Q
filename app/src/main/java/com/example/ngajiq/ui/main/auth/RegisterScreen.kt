@@ -14,6 +14,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
@@ -30,6 +31,7 @@ import com.example.ngajiq.ui.common.PrimaryButton
 import com.example.ngajiq.R
 import com.example.ngajiq.data.viewmodel.AuthViewModel
 import com.example.ngajiq.ui.navigation.Routes
+import com.example.ngajiq.ui.theme.DeepBlue
 
 // ---------------------------------------------------------
 // 1. STATEFUL COMPOSABLE (Logic, ViewModel, Validation)
@@ -99,13 +101,35 @@ fun RegisterContent(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // --- Header Section ---
+            // --- Header Section ---
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f),
+                    .weight(1f), // Mengambil sisa ruang di atas form
                 contentAlignment = Alignment.Center
             ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                // 1. Gambar (Image)
+                // Ditaruh di sini agar posisinya di layer paling bawah (background)
+                // atau diatur align ke BottomCenter agar menempel di bawah
+                Image(
+                    painter = painterResource(id = R.drawable.ngaji_header),
+                    contentDescription = "Ngaji-Q Header",
+                    modifier = Modifier
+                        .fillMaxWidth() // Agar gambar memenuhi lebar layar
+                        .height(180.dp) // Tinggi disesuaikan agar karakter terlihat jelas
+                        .align(Alignment.BottomCenter), // Menempel di bawah Box
+                    contentScale = ContentScale.FillWidth // Memastikan gambar tidak terpotong kiri-kanan
+                )
+
+                // 2. Teks (Column)
+                // Ditaruh setelah Image agar (jika overlap) teks berada di atas gambar
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .align(Alignment.Center) // Teks berada di tengah Box
+                        .padding(bottom = 50.dp) // Memberi jarak agar tidak menabrak kepala karakter di gambar
+                ) {
                     Text(
                         text = "Yuk Teman-Teman",
                         fontSize = 22.sp,
@@ -119,15 +143,7 @@ fun RegisterContent(
                         color = Color.White
                     )
                 }
-                Image(
-                    painter = painterResource(id = R.drawable.ngaji_header),
-                    contentDescription = "Ngaji-Q Header",
-                    modifier = Modifier
-                        .height(120.dp)
-                        .align(Alignment.BottomCenter)
-                )
             }
-
             // --- Form Section ---
             Column(
                 modifier = Modifier
@@ -142,18 +158,24 @@ fun RegisterContent(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Spacer(Modifier.height(16.dp))
+                Text("Nama Pengguna", fontWeight = FontWeight.Bold, fontSize = 20.sp, modifier = Modifier.fillMaxWidth())
+
                 CustomTextField(
                     label = "Nama Pengguna",
                     value = username,
                     onValueChange = { username = it }
                 )
                 Spacer(Modifier.height(16.dp))
+                Text("Alamat Email", fontWeight = FontWeight.Bold, fontSize = 20.sp, modifier = Modifier.fillMaxWidth())
+
                 CustomTextField(
                     label = "Alamat Email",
                     value = email,
                     onValueChange = { email = it }
                 )
                 Spacer(Modifier.height(16.dp))
+                Text("Kata Sandi", fontWeight = FontWeight.Bold, fontSize = 20.sp, modifier = Modifier.fillMaxWidth())
+
                 CustomTextField(
                     label = "Kata Sandi",
                     value = password,
@@ -161,6 +183,8 @@ fun RegisterContent(
                     isPassword = true
                 )
                 Spacer(Modifier.height(16.dp))
+                Text("Konfirmasi Kata Sandi", fontWeight = FontWeight.Bold, fontSize = 20.sp, modifier = Modifier.fillMaxWidth())
+                
                 CustomTextField(
                     label = "Konfirmasi Kata Sandi",
                     value = confirmPassword,
@@ -187,7 +211,7 @@ fun RegisterContent(
                     ClickableText(
                         text = AnnotatedString("Masuk"),
                         style = TextStyle(
-                            color = MaterialTheme.colorScheme.tertiary,
+                            color = DeepBlue,
                             fontWeight = FontWeight.Bold,
                             fontSize = 14.sp
                         ),

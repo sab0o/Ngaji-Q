@@ -18,16 +18,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.ngajiq.data.model.Category
 import com.example.ngajiq.data.model.Recommendation
+import com.example.ngajiq.data.model.Subject
 import com.example.ngajiq.data.repository.HomeRepository
 import com.example.ngajiq.ui.main.home.components.CategoryItem
 import com.example.ngajiq.ui.main.home.components.HeaderSection
-import com.example.ngajiq.ui.main.home.components.RecommendationItem
+import com.example.ngajiq.ui.main.home.components.RecommendationCard
 import com.example.ngajiq.ui.main.home.components.SearchBarSection
+import com.example.ngajiq.ui.navigation.Routes
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
@@ -41,29 +42,26 @@ fun HomeScreen(navController: NavHostController) {
             ?: "Teman Ngaji"
     }
     val categories: List<Category> = HomeRepository.getCategories()
-    val recommendations: List<Recommendation> = HomeRepository.getRecommendations()
+    val recommendations: List<Subject> = HomeRepository.getRecommendations()
     val featuredCard: Recommendation = HomeRepository.getFeaturedCard()
 
     HomeScreenContent(
-        username,
+        navController=navController,
+        username=username,
         categories = categories,
         recommendations = recommendations,
-        featuredCard = featuredCard,
-        onCategoryClick = { /* TODO */ },
-        onRecommendationClick = { /* TODO */ }
     )
 }
 
 @Composable
 fun HomeScreenContent(
     username: String,
+    navController: NavHostController,
     categories: List<Category>,
-    recommendations: List<Recommendation>,
-    featuredCard: Recommendation,
+    recommendations: List<Subject>,
     modifier: Modifier = Modifier,
-    onCategoryClick: (Category) -> Unit = {},
-    onRecommendationClick: (Recommendation) -> Unit = {}
 ) {
+
     val scrollState = rememberScrollState()
     val overlapHeight = 28.dp
 
@@ -108,7 +106,7 @@ fun HomeScreenContent(
                         rowCategories.forEach { category ->
                             CategoryItem(
                                 category = category,
-                                onClick = { onCategoryClick(category) }
+                                onClick = { navController.navigate("${Routes.KATEGORI_SUBJECT}/${category.name}") }
                             )
                         }
                     }
@@ -144,9 +142,9 @@ fun HomeScreenContent(
                     .padding(start = 16.dp, bottom = 24.dp)
             ) {
                 items(recommendations) { item ->
-                    RecommendationItem(
-                        recommendation = item,
-                        onClick = { onRecommendationClick(item) }
+                    RecommendationCard(
+                        navController = navController,
+                        subject = item,
                     )
                     Spacer(modifier = Modifier.width(12.dp))
                 }
@@ -158,5 +156,11 @@ fun HomeScreenContent(
 @Preview(showBackground = true)
 @Composable
 fun PreviewHomeScreen() {
-    HomeScreen(rememberNavController())
+    val navController = rememberNavController()
+    HomeScreenContent(
+        navController = navController,
+        username = "Preview User", // Fake name avoids Firebase
+        categories = HomeRepository.getCategories(), // This is safe if it's just a static list
+        recommendations = HomeRepository.getRecommendations() // Or pass fake subjects here if you want to see them
+    )
 }

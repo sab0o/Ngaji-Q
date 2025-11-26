@@ -12,6 +12,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
@@ -27,6 +28,7 @@ import com.example.ngajiq.data.viewmodel.AuthViewModel
 import com.example.ngajiq.ui.common.CustomTextField
 import com.example.ngajiq.ui.common.GoogleButton
 import com.example.ngajiq.ui.common.PrimaryButton
+import com.example.ngajiq.ui.theme.Otomanopeeone
 
 // Define your app's colors
 val AppLightBlue = Color(0xFF5696F5)
@@ -104,36 +106,40 @@ fun LoginContent(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f),
+                    .weight(1f)
+                    .background(Color(0xFF5696F5)), // Set the blue background color here
                 contentAlignment = Alignment.Center
             ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    // Make sure this drawable exists, otherwise Preview will show empty space
-                    Image(
-                        painter = painterResource(id = R.drawable.ngaji_header),
-                        contentDescription = "Ngaji-Q Header",
-                        modifier = Modifier.height(120.dp)
+                // Place the image at the bottom of the box
+                Image(
+                    painter = painterResource(id = R.drawable.ngaji_header),
+                    contentDescription = "Ngaji-Q Header",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(180.dp) // Adjust height as needed to match the design
+                        .align(Alignment.BottomCenter), // Align image to the bottom
+                    contentScale = ContentScale.FillWidth // Ensure image fills the width
+                )
+
+                // Stack the text in a column, centered in the box
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = "Selamat datang",
+                        fontSize = 32.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black,
+                        modifier = Modifier.padding(bottom = 8.dp)
                     )
-                    Spacer(Modifier.height(16.dp))
-                    Box {
-                        Text(
-                            text = "Selamat datang",
-                            fontSize = 32.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.Black,
-                            modifier = Modifier.padding(5.dp),
-                        )
-                        Spacer(Modifier.height(40.dp))
-                        Text(
-                            text = "di Ngaji-Q",
-                            fontSize = 44.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White,
-                            modifier = Modifier
-                                .padding(top = 20.dp)
-                                .align(Alignment.BottomCenter)
-                        )
-                    }
+                    Text(
+                        text = "di Ngaji-Q",
+                        fontSize = 44.sp,
+                        fontFamily = Otomanopeeone, // Ensure this font family is defined
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
                 }
             }
 
