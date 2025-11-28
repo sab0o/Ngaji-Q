@@ -8,6 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -20,8 +21,7 @@ import com.example.ngajiq.ui.main.iqra.components.SpeakerButton
 import com.example.ngajiq.ui.main.iqra.components.ProgressBar
 import com.example.ngajiq.ui.theme.*
 import com.example.ngajiq.data.model.HurufHijaiyah
-import com.example.ngajiq.data.repository.HurufHijaiyahRepository
-import com.example.ngajiq.ui.navigation.Routes
+import com.example.ngajiq.R
 
 @Composable
 fun ListeningScreen(item: HurufHijaiyah, navController: NavController) {
@@ -29,15 +29,17 @@ fun ListeningScreen(item: HurufHijaiyah, navController: NavController) {
     // STATE
     var isAudioPlayed by remember { mutableStateOf(false) }
 
-    // 🎵 MEDIA PLAYER (remember + cleanup)
     val context = LocalContext.current
+    val isPreview = LocalInspectionMode.current
+
     val mediaPlayer = remember {
-        MediaPlayer.create(context, item.audioRes)   // gunakan audioRes dari item
+        if (!isPreview) MediaPlayer.create(context, item.audioRes)
+        else null
     }
 
     DisposableEffect(Unit) {
         onDispose {
-            mediaPlayer.release() // cleanup ketika screen keluar
+            mediaPlayer?.release() // cleanup ketika screen keluar
         }
     }
 
@@ -78,7 +80,7 @@ fun ListeningScreen(item: HurufHijaiyah, navController: NavController) {
 
             SpeakerButton(
                 onSpeakerClick = {
-                    mediaPlayer.start()   // 🔊 PLAY AUDIO
+                    mediaPlayer?.start()   // 🔊 PLAY AUDIO
                     isAudioPlayed = true
                 },
                 modifier = Modifier
@@ -134,7 +136,14 @@ fun LetterSpelling(
 @Preview(showBackground = true)
 @Composable
 fun PreviewListeningScreen() {
+    val dummy = HurufHijaiyah(
+        id = 1,
+        label = "Ba",
+        imageRes = R.drawable.ic_ba, // icon dummy
+        audioRes = 0 // ❗ audio dummy
+    )
+
     NgajiQTheme {
-        ListeningScreen(HurufHijaiyahRepository.getIqra1List()[0],navController = rememberNavController())
+        ListeningScreen(dummy, navController = rememberNavController())
     }
 }
