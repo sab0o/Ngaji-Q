@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.ngajiq.R
-import com.example.ngajiq.ui.main.iqra.components.ButtonLanjut
+import com.example.ngajiq.ui.main.iqra.components.ButtonBlue
 import com.example.ngajiq.ui.main.iqra.components.ButtonReview
 import com.example.ngajiq.ui.main.iqra.components.PercentageCircle
 import com.example.ngajiq.ui.main.iqra.components.ScoreBox
@@ -103,7 +103,7 @@ fun ResultScreen(
 
         Spacer(modifier = Modifier.height(44.dp))
 
-        ButtonLanjut(
+        ButtonBlue(
             text = "Lanjut",
             onClick = onNext,
             buttonColor = Color(0xFF55D5FF),
@@ -185,7 +185,7 @@ fun CongratsScreen(percentage: Int,navController: NavController) {
 
         Spacer(modifier = Modifier.height(50.dp))
 
-        ButtonLanjut(
+        ButtonBlue(
             text = "SELESAI",
             onClick = {
                 navController.navigate(Routes.HOME);

@@ -12,7 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.ngajiq.ui.main.iqra.components.ButtonLanjut
+import com.example.ngajiq.ui.main.iqra.components.ButtonBlue
 import com.example.ngajiq.ui.main.iqra.components.DashedLetterBox
 import com.example.ngajiq.ui.main.iqra.components.HintText
 import com.example.ngajiq.ui.main.iqra.components.LetterBox
@@ -95,7 +95,7 @@ fun ListeningScreen(item: HurufHijaiyah, navController: NavController) {
 
         Spacer(modifier = Modifier.weight(1f))
 
-        ButtonLanjut(
+        ButtonBlue(
             text = "LANJUT",
             onClick = {
                 if (isAudioPlayed) navController.navigate("writingIqra/${item.id}")

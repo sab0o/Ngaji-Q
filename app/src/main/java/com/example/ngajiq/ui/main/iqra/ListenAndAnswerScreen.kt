@@ -78,7 +78,7 @@ fun AlifJawabScreen(navController: NavController) {
 
         // 🔵 TOMBOL PERIKSA
         if (!isChecked) {
-            ButtonLanjut(
+            ButtonBlue(
                 text = "PERIKSA JAWABAN",
                 onClick = {
                     if (selectedLetter != null) {

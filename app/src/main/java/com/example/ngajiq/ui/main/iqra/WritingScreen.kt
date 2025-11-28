@@ -99,7 +99,7 @@ fun WritingScreen(
 
         val selesai = knobPosPx >= maxPositionPx * 0.95f
 
-        ButtonLanjut(
+        ButtonBlue(
             text = "Lanjut",
             onClick = {
                 if (selesai) {

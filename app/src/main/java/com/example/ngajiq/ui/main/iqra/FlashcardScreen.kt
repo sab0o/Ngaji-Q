@@ -10,7 +10,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.ngajiq.ui.main.iqra.components.ButtonLanjut
+import com.example.ngajiq.ui.main.iqra.components.ButtonBlue
 import com.example.ngajiq.ui.main.iqra.components.FlashcardCard
 import com.example.ngajiq.ui.main.iqra.components.HintText
 import com.example.ngajiq.ui.main.iqra.components.ProgressBar
@@ -72,7 +72,7 @@ fun FlashcardScreen(navController: NavController) {
         Spacer(modifier = Modifier.weight(1f))
 
         // Tombol LANJUT: aktif hanya jika isDetailShown == true
-        ButtonLanjut(
+        ButtonBlue(
             text = if (currentIndex == flashcards.lastIndex) "SELESAI" else "LANJUT",
             onClick = {
                 if (isDetailShown) {

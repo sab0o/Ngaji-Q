@@ -152,7 +152,7 @@ fun ListenHarakatScreen(navController: NavController) {
         // ============================
         // 🔵 Tombol LANJUT
         // ============================
-        ButtonLanjut(
+        ButtonBlue(
             text = "LANJUT",
             onClick = {
                 if (allPlayed) {

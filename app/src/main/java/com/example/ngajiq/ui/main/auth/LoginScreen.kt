@@ -28,7 +28,13 @@ import com.example.ngajiq.data.viewmodel.AuthViewModel
 import com.example.ngajiq.ui.common.CustomTextField
 import com.example.ngajiq.ui.common.GoogleButton
 import com.example.ngajiq.ui.common.PrimaryButton
+import com.example.ngajiq.ui.main.iqra.components.ButtonBlue
+import com.example.ngajiq.ui.theme.BrightCyan
+import com.example.ngajiq.ui.theme.BrightCyanShadow
+import com.example.ngajiq.ui.theme.DeepBlue
+import com.example.ngajiq.ui.theme.IceBlue
 import com.example.ngajiq.ui.theme.Otomanopeeone
+import com.example.ngajiq.ui.theme.PrimaryBlue
 
 // Define your app's colors
 val AppLightBlue = Color(0xFF5696F5)
@@ -200,10 +206,20 @@ fun LoginContent(
                 Spacer(Modifier.height(24.dp))
 
                 // Buttons
-                PrimaryButton(
-                    text = "MASUK",
-                    onClick = { onLoginClick(emailInput, passwordInput) }
+                ButtonBlue(
+                    text = "MASUK", onClick = { onLoginClick(emailInput, passwordInput) },
+                    buttonColor = BrightCyan,
+                    shadowColor = BrightCyanShadow,
+                    textColor = Color.White,
+                    modifier = Modifier
+                        .fillMaxWidth(0.9f)
+                        .height(56.dp)
+
                 )
+//                PrimaryButton(
+//                    text = "MASUK",
+//                    onClick = { onLoginClick(emailInput, passwordInput) }
+//                )
                 Spacer(Modifier.height(16.dp))
 
                 GoogleButton(onClick = { onGoogleClick() })

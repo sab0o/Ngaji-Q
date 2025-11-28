@@ -29,9 +29,6 @@ import com.example.ngajiq.ui.main.home.components.HeaderSection
 import com.example.ngajiq.ui.main.home.components.RecommendationCard
 import com.example.ngajiq.ui.main.home.components.SearchBarSection
 import com.example.ngajiq.ui.navigation.Routes
-import com.example.ngajiq.ui.main.videoPembelajaran.KategoriVideoPembelajaranScreen
-
-import com.example.ngajiq.ui.navigation.Routes
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
@@ -46,16 +43,13 @@ fun HomeScreen(navController: NavHostController) {
     }
     val categories: List<Category> = HomeRepository.getCategories()
     val recommendations: List<Subject> = HomeRepository.getRecommendations()
-    val featuredCard: Recommendation = HomeRepository.getFeaturedCard()
+//    val featuredCard: Recommendation = HomeRepository.getFeaturedCard()
 
     HomeScreenContent(
         navController=navController,
         username=username,
         categories = categories,
         recommendations = recommendations,
-        featuredCard = featuredCard,
-        onCategoryClick = { /* TODO */ },
-        onRecommendationClick = { /* TODO */ }
     )
 }
 

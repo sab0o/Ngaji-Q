@@ -18,7 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 
 @Composable
-fun ButtonLanjut(
+fun ButtonBlue(
     text: String,
     onClick: () -> Unit,
     buttonColor: Color,
