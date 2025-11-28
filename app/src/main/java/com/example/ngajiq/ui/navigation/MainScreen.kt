@@ -34,9 +34,11 @@ import com.example.ngajiq.data.PracticeRepository
 import com.example.ngajiq.data.model.HurufHijaiyah
 import com.example.ngajiq.data.repository.HurufHijaiyahRepository
 import com.example.ngajiq.data.repository.SubjectRepository
+import com.example.ngajiq.data.viewmodel.AuthViewModel
 import com.example.ngajiq.ui.main.auth.LoginScreen
 import com.example.ngajiq.ui.main.auth.RegisterScreen
 import com.example.ngajiq.ui.main.home.HomeScreen
+import com.example.ngajiq.ui.main.home.components.BottomNavigationBar
 import com.example.ngajiq.ui.main.iqra.ListenHarakatScreen
 import com.example.ngajiq.ui.main.iqra.ListeningScreen
 import com.example.ngajiq.ui.main.iqra.MapIqra
@@ -52,24 +54,8 @@ import com.example.ngajiq.ui.main.iqra.WritingScreen
 import com.example.ngajiq.ui.main.iqra.AlifJawabScreen
 import com.example.ngajiq.ui.main.iqra.LearningCompletionScreen
 import com.example.ngajiq.ui.main.iqra.FlashcardScreen
+import com.google.firebase.auth.FirebaseAuth
 
-sealed class BottomItem(
-    val route: String,
-    val label: String,
-    val icon: ImageVector
-) {
-    data object Home : BottomItem(Routes.HOME, "Home", Icons.Filled.Home)
-    data object Materi : BottomItem(Routes.MATERI, "Materi", Icons.Filled.Book)
-    data object Quiz : BottomItem(Routes.CARINGAJI, "Ngaji", Icons.Filled.School)
-    data object Profile : BottomItem(Routes.PROFILE, "Profil", Icons.Filled.Person)
-}
-
-private val bottomItems = listOf(
-    BottomItem.Home,
-    BottomItem.Materi,
-    BottomItem.Quiz,
-    BottomItem.Profile
-)
 
 @Composable
 fun MainScreen() {
@@ -87,7 +73,7 @@ fun MainScreen() {
     Scaffold(
         bottomBar = {
             if (currentRoute in bottomBarRoutes) {
-                BottomNavBar(navController)
+                BottomNavigationBar(navController)
             }
         }
     ) { padding ->
@@ -97,60 +83,6 @@ fun MainScreen() {
     }
 }
 
-@Composable
-private fun BottomNavBar(navController: NavHostController) {
-    val backStack by navController.currentBackStackEntryAsState()
-    val dest = backStack?.destination
-
-    NavigationBar {
-        bottomItems.forEach { item ->
-            val selected = isTopLevelDestination(dest, item.route)
-
-            NavigationBarItem(
-                selected = selected,
-                onClick = {
-                    navController.navigate(item.route) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
-                        }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                },
-                icon = {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Icon(
-                            imageVector = item.icon,
-                            contentDescription = item.label,
-                            tint = DeepBlue
-                        )
-
-
-                        Box(
-                            modifier = Modifier
-                                .height(2.dp)
-                                .width(1.dp)
-                                .background(
-                                    if (selected) DeepBlue
-                                    else Color.Transparent
-                                )
-                        )
-                    }
-                },
-                label = { Text("") },
-                colors = NavigationBarItemDefaults.colors(
-                    indicatorColor = Color.Transparent
-                )
-            )
-        }
-    }
-}
-
-
-private fun isTopLevelDestination(dest: NavDestination?, route: String): Boolean =
-    dest?.hierarchy?.any { it.route == route } == true
 
 
 @Composable
@@ -233,7 +165,11 @@ fun MainNavHost(navController: NavHostController) {
             onNavigateToHome = {navController.navigate(Routes.HOME)}
         )}
         composable(Routes.CARINGAJI) { MapsScreen() }
-        composable(Routes.PROFILE) { ProfileScreen() }
+        composable(Routes.PROFILE) {
+            val username = FirebaseAuth.getInstance().currentUser?.displayName ?: "Teman Ngaji"
+            val authViewModel = AuthViewModel()
+            ProfileScreen(username,onLogoutClick={authViewModel.logout()})
+        }
         composable(
             route = "${Routes.KATEGORI_SUBJECT}/{categoryName}"
         ) { backStackEntry ->

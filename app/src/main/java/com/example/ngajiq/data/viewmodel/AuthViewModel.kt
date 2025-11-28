@@ -10,7 +10,9 @@ class AuthViewModel : ViewModel() {
 
     val userLiveData = MutableLiveData<FirebaseUser?>()
     val toastMessage = MutableLiveData<String?>() // For errors/success messages
-
+    fun getCurrentUser(): FirebaseUser? {
+        return auth.currentUser
+    }
     fun login(email: String, pass: String) {
         if(email.isBlank() || pass.isBlank()) {
             toastMessage.value = "Please fill in all fields"
@@ -40,6 +42,12 @@ class AuthViewModel : ViewModel() {
                     toastMessage.postValue("Register Failed: ${task.exception?.message}")
                 }
             }
+    }
+
+    fun logout() {
+        auth.signOut()
+        userLiveData.postValue(null)
+        toastMessage.postValue("Berhasil keluar")
     }
 
     // Reset toast message after showing it

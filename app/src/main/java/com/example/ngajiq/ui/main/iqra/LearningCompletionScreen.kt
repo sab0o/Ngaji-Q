@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.ngajiq.R
 import com.example.ngajiq.ui.main.iqra.components.ButtonBlue
-import com.example.ngajiq.ui.main.iqra.components.ButtonReview
+import com.example.ngajiq.ui.main.iqra.components.ButtonWhite
 import com.example.ngajiq.ui.main.iqra.components.PercentageCircle
 import com.example.ngajiq.ui.main.iqra.components.ScoreBox
 import com.example.ngajiq.ui.main.iqra.components.StarRating
@@ -114,7 +114,7 @@ fun ResultScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        ButtonReview(
+        ButtonWhite(
             text = "Review Jawaban",
             onClick = onReview,
             buttonColor = Color.White,

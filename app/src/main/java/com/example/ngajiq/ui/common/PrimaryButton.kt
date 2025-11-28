@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.ngajiq.ui.main.auth.AppButtonBlue
 
@@ -28,4 +29,13 @@ fun PrimaryButton(text: String, onClick: () -> Unit) {
     ) {
         Text(text, color = Color.White, fontWeight = FontWeight.Bold)
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PrimaryButtonPreview() {
+    PrimaryButton("Login") {
+        // Handle button click
+    }
+
 }
