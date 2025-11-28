@@ -69,7 +69,7 @@ fun ProgressBar(
             contentAlignment = Alignment.Center
         ) {
             Image(
-                painter = painterResource(id = R.drawable.profile_placeholder),
+                painter = painterResource(id = R.drawable.brokolibenar),
                 contentDescription = "Profile",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier

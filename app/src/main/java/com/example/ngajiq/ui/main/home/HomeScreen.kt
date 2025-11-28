@@ -43,7 +43,6 @@ fun HomeScreen(navController: NavHostController) {
     }
     val categories: List<Category> = HomeRepository.getCategories()
     val recommendations: List<Subject> = HomeRepository.getRecommendations()
-//    val featuredCard: Recommendation = HomeRepository.getFeaturedCard()
 
     HomeScreenContent(
         navController=navController,

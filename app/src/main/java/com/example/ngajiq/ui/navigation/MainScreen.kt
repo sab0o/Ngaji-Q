@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -157,8 +158,6 @@ fun MainNavHost(navController: NavHostController) {
         composable(Routes.LOGIN) { LoginScreen(
             onNavigateToRegister= {navController.navigate(Routes.REGISTER)},
             onNavigateToHome = {navController.navigate(Routes.HOME)}
-
-
         ) }
         composable(Routes.REGISTER) { RegisterScreen(
             onNavigateToLogin = { navController.navigate(Routes.LOGIN) },
@@ -166,9 +165,15 @@ fun MainNavHost(navController: NavHostController) {
         )}
         composable(Routes.CARINGAJI) { MapsScreen() }
         composable(Routes.PROFILE) {
-            val username = FirebaseAuth.getInstance().currentUser?.displayName ?: "Teman Ngaji"
-            val authViewModel = AuthViewModel()
-            ProfileScreen(username,onLogoutClick={authViewModel.logout()})
+            val auth: AuthViewModel = viewModel()
+            ProfileScreen(onLogoutClick={
+                auth.logout()
+                navController.navigate(Routes.LOGIN) {
+                    popUpTo(0) {
+                        inclusive = true
+                    }
+                    launchSingleTop = true
+                }})
         }
         composable(
             route = "${Routes.KATEGORI_SUBJECT}/{categoryName}"

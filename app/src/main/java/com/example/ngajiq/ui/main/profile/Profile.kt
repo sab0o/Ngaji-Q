@@ -1,6 +1,7 @@
 package com.example.ngajiq.ui.main.profile
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -21,14 +22,18 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.ngajiq.R
 import com.example.ngajiq.data.viewmodel.AuthViewModel
 import com.example.ngajiq.ui.navigation.Routes
+import com.google.firebase.auth.FirebaseAuth
 
 // --- Color Definitions ---
 val BlueLight = Color(0xFF64B5F6)
@@ -38,7 +43,15 @@ val RedSoft = Color(0xFFFF8A80)
 val YellowAccent = Color(0xFFFFD54F)
 
 @Composable
-fun ProfileScreen(username:String, onLogoutClick: () -> Unit) {
+fun ProfileScreen(onLogoutClick: () -> Unit) {
+    val auth = FirebaseAuth.getInstance()
+    val currentUser = auth.currentUser
+
+    val username = remember {
+        currentUser?.displayName?.ifBlank { null }
+            ?: currentUser?.email?.substringBefore("@")
+            ?: "Teman Ngaji"
+    }
     val gradientBrush = Brush.verticalGradient(
         colors = listOf(BlueLight, BluePrimary)
     )
@@ -140,11 +153,15 @@ fun ProfileInfoCard(username: String) {
                     .background(Color(0xFF81C784)),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(
-                    imageVector = Icons.Default.Face,
-                    contentDescription = null,
-                    tint = Color.White,
-                    modifier = Modifier.size(50.dp)
+                Image(
+                    painter = painterResource(id = R.drawable.brokolibenar),
+                    contentDescription = "Profile Photo",
+
+                    contentScale = ContentScale.Crop,
+
+                    modifier = Modifier
+                        .matchParentSize()
+                        .clip(CircleShape)
                 )
             }
 
@@ -312,6 +329,5 @@ fun LogoutItem(onLogoutClick: () -> Unit) {
 fun ProfileScreenPreview() {
     ProfileScreen(
         onLogoutClick = {},
-        username = "test"
     )
 }
