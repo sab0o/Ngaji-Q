@@ -6,9 +6,14 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Call
+import androidx.compose.material.icons.filled.Chat
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -16,94 +21,94 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.MapUiSettings
+import com.google.maps.android.compose.rememberCameraPositionState
+import com.google.android.gms.maps.CameraUpdateFactory
 
-// Main Entry Point
+// Main Entry Point (Stateful)
 @Composable
 fun MapsScreen(
     mapsViewModel: MapsViewModel = viewModel()
 ) {
     val uiState by mapsViewModel.uiState.collectAsState()
+    MapsScreenContent(
+        uiState = uiState,
+        onEvent = mapsViewModel::onEvent
+    )
+}
 
-    // This controls the map's camera
+// UI Composable (Stateless)
+@Composable
+fun MapsScreenContent(
+    uiState: MapsUiState,
+    onEvent: (MapsEvent) -> Unit
+) {
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(uiState.userLocation, 15f)
     }
 
-    Scaffold(
-        // ...
-    ) { paddingValues ->
+    LaunchedEffect(uiState.searchedLocation) {
+        uiState.searchedLocation?.let {
+            // Animasikan kamera ke posisi baru
+            cameraPositionState.animate(
+                update = CameraUpdateFactory.newLatLngZoom(it, 15f),
+                durationMs = 1000 // durasi animasi 1 detik
+            )
+        }
+    }
+
+    Scaffold { paddingValues ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            val topBackgroundHeight = 200.dp
-
-            // --- 1. DRAW THE MAP FIRST (BOTTOM LAYER) ---
+            // --- 1. PETA (LAPISAN PALING BAWAH) ---
             GoogleMap(
-                modifier = Modifier.fillMaxSize(), // This fills the whole screen
+                modifier = Modifier.fillMaxSize(),
                 cameraPositionState = cameraPositionState,
-                properties = MapProperties(
-                    isMyLocationEnabled = false // We use a custom marker
-                ),
-                uiSettings = MapUiSettings(
-                    zoomControlsEnabled = false,
-                    myLocationButtonEnabled = false
-                ),
-                onMapClick = {
-                    mapsViewModel.onEvent(MapsEvent.OnMapClick)
-                }
+                uiSettings = MapUiSettings(zoomControlsEnabled = false, myLocationButtonEnabled = false),
+                onMapClick = { onEvent(MapsEvent.OnMapClick) }
             ) {
-                // ... All your Markers and Polyline code ...
+
             }
 
-            // --- 2. DRAW THE GRADIENT (ON TOP OF MAP) ---
-            Box(
+            // --- 2. HEADER GRADIENT DAN KONTENNYA ---
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(topBackgroundHeight)
                     .background(
                         Brush.linearGradient(
                             colors = listOf(
-                                Color(0xFF86D1FF),
-                                Color(0xFF5696F5)
+                                Color(0xFF74D5FF), // Warna biru muda
+                                Color(0xFF5696F5)  // Warna biru lebih gelap
                             )
                         )
                     )
-            )
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(modifier = Modifier.height(32.dp)) // Spacer untuk status bar
+                Text(
+                    text = "Cari Guru Ngaji",
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 22.sp
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                SearchBar(onSearchClick = { /*TODO*/ })
+            }
 
-            // --- 3. DRAW THE TEXT (ON TOP OF GRADIENT) ---
-            Text(
-                text = "Cari Guru Ngaji",
-                color = Color.White,
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp,
-                modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .padding(top = 16.dp)
-            )
 
-            // --- 4. DRAW THE SEARCH BAR (ON TOP OF GRADIENT) ---
-            SearchBar(
-                modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    // Combine padding into one modifier for clarity
-                    .padding(
-                        top = topBackgroundHeight / 2,
-                        start = 16.dp,
-                        end = 16.dp
-                    ),
-                onSearchClick = {
-                    mapsViewModel.onEvent(MapsEvent.OnSearchClick)
-                }
-            )
-
-            // --- 5. DRAW THE INFO CARD (ON TOP OF MAP) ---
+            // --- 3. KARTU INFO GURU (LAPISAN PALING ATAS) ---
             uiState.selectedTeacher?.let { teacher ->
                 TeacherInfoCard(
                     modifier = Modifier
@@ -119,39 +124,47 @@ fun MapsScreen(
 @Composable
 private fun SearchBar(
     modifier: Modifier = Modifier,
-    onSearchClick: () -> Unit
-) {
+    onSearchClick: (String) -> Unit
+    ) {
     var searchQuery by remember { mutableStateOf("") }
 
-    OutlinedTextField(
-        value = searchQuery,
-        onValueChange = { searchQuery = it },
-        placeholder = { Text("Ketik lokasi") },
-        leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search Icon") },
-        trailingIcon = {
-            Button(
-                onClick = onSearchClick,
-                shape = RoundedCornerShape(20.dp), // Your corner radius
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF70B6FA) // Your blue
-                ),
-                modifier = Modifier.padding(end = 8.dp)
-            ) {
-                Text("Cari")
-            }
-        },
-        shape = RoundedCornerShape(20.dp), // Your corner radius
-        colors = TextFieldDefaults.colors(
-            focusedContainerColor = Color.White,
-            unfocusedContainerColor = Color.White,
-            disabledContainerColor = Color.White,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent
-        ),
-        modifier = modifier
-            .fillMaxWidth()
-            .height(64.dp)
-    )
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        // Search Field
+        OutlinedTextField(
+            value = searchQuery,
+            onValueChange = { searchQuery = it },
+            placeholder = { Text("Ketik lokasi", color = Color.Gray) },
+            leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search Icon", tint = Color.Gray) },
+            shape = CircleShape,
+            singleLine = true,
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = Color.White,
+                unfocusedContainerColor = Color.White,
+                disabledContainerColor = Color.White,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
+            ),
+            modifier = Modifier.weight(1f)
+        )
+
+        Spacer(Modifier.width(8.dp))
+
+        // Tombol "Cari"
+        Button(
+            onClick = { onSearchClick(searchQuery) },
+            shape = CircleShape,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF45D1FF) // Warna cyan/biru muda
+            ),
+            modifier = Modifier.height(56.dp), // Samakan tinggi dengan TextField
+            contentPadding = PaddingValues(horizontal = 24.dp)
+        ) {
+            Text("Cari", color = Color.White, fontWeight = FontWeight.Bold)
+        }
+    }
 }
 
 @Composable
@@ -161,60 +174,113 @@ private fun TeacherInfoCard(
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp), // Your corner radius
+        shape = RoundedCornerShape(20.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         Row(
             modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.Top
         ) {
-            // TODO: Replace with real image (e.g., using Coil library)
-            Image(
-                // Using a placeholder icon
-                imageVector = Icons.Default.AccountCircle,
-                contentDescription = teacher.name,
-                contentScale = ContentScale.Crop,
+            // Foto Profil
+            Box(
                 modifier = Modifier
-                    .size(60.dp)
+                    .size(64.dp)
                     .clip(CircleShape)
-                    .background(Color.LightGray)
-            )
-
-            Spacer(Modifier.width(16.dp))
-
-            Column(Modifier.weight(1f)) {
-                Text(teacher.name, fontWeight = FontWeight.Bold, fontSize = 18.sp)
-                Text("Guru Ngaji", fontSize = 14.sp, color = Color.Gray)
+                    .background(Color(0xFF9FF29A)) // Warna background hijau muda
+            ) {
+                // TODO: Ganti dengan gambar asli menggunakan Coil
+                Image(
+                    imageVector = Icons.Default.AccountCircle, // Placeholder
+                    contentDescription = teacher.name,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(8.dp)
+                )
             }
 
             Spacer(Modifier.width(16.dp))
 
-            // "Chat" and "Arahkan" buttons
-            Row {
-                Button(
-                    onClick = { /*TODO: Handle Chat*/ },
-                    shape = RoundedCornerShape(20.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF70B6FA).copy(alpha = 0.2f),
-                        contentColor = Color(0xFF5696F5)
-                    ),
-                    contentPadding = PaddingValues(horizontal = 16.dp)
-                ) {
-                    Text("Chat")
-                }
-                Spacer(Modifier.width(8.dp))
-                Button(
-                    onClick = { /*TODO: Handle Route*/ },
-                    shape = RoundedCornerShape(20.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF70B6FA)
-                    ),
-                    contentPadding = PaddingValues(horizontal = 16.dp)
-                ) {
-                    Text("Arahkan")
+            // Kolom Info Teks dan Tombol
+            Column {
+                Text(teacher.name, fontWeight = FontWeight.Bold, fontSize = 18.sp, color = Color.Black)
+                Spacer(Modifier.height(4.dp))
+                Text(teacher.address, fontSize = 12.sp, color = Color.Gray, lineHeight = 16.sp)
+                Spacer(Modifier.height(12.dp))
+
+                // Tombol Kontak
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    ContactButton(
+                        text = teacher.phone,
+                        icon = Icons.Default.Call,
+                        onClick = { /*TODO: Handle Call*/ }
+                    )
+                    ContactButton(
+                        text = teacher.whatsapp,
+                        icon = Icons.Default.Chat, // Icon mirip WhatsApp
+                        onClick = { /*TODO: Handle WhatsApp*/ }
+                    )
                 }
             }
         }
     }
+}
+
+@Composable
+private fun ContactButton(
+    text: String,
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    onClick: () -> Unit
+) {
+    Button(
+        onClick = onClick,
+        shape = CircleShape,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color(0xFFE0F7FF), // Warna biru sangat muda
+            contentColor = Color(0xFF45D1FF)    // Warna icon & teks biru
+        ),
+        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
+        elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(icon, contentDescription = null, modifier = Modifier.size(16.dp))
+            Spacer(Modifier.width(4.dp))
+            Text(text, fontSize = 12.sp)
+        }
+    }
+}
+
+
+// =================================================================
+// PREVIEW
+// =================================================================
+@Preview(showBackground = true, name = "Preview Peta dengan Info Card")
+@Composable
+fun MapsScreenWithCardPreview() {
+    val fakeTeacher = Teacher(
+        id = "preview_1",
+        name = "Ust. Khalid",
+        address = "Jalan Kalimantan No. 12, Kaliwates, Sumbersari, Jember, Jawa Timur 68121",
+        phone = "081xxxx...",
+        whatsapp = "081xxxx...",
+        location = LatLng(-6.2088, 106.8456)
+    )
+    val fakeUiState = MapsUiState(selectedTeacher = fakeTeacher)
+
+    MapsScreenContent(
+        uiState = fakeUiState,
+        onEvent = {}
+    )
+}
+
+@Preview(showBackground = true, name = "Preview Peta Tampilan Awal")
+@Composable
+fun MapsScreenDefaultPreview() {
+    val fakeUiState = MapsUiState(selectedTeacher = null)
+
+    MapsScreenContent(
+        uiState = fakeUiState,
+        onEvent = {}
+    )
 }

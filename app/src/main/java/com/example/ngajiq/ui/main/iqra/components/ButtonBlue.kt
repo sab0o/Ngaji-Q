@@ -1,3 +1,5 @@
+// File: app/src/main/java/com/example/ngajiq/ui/main/iqra/components/ButtonBlue.kt
+
 package com.example.ngajiq.ui.main.iqra.components
 
 import androidx.compose.foundation.background
@@ -12,10 +14,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun ButtonBlue(
@@ -35,23 +37,26 @@ fun ButtonBlue(
     val buttonOffset = if (isPressed) 2.dp else 6.dp
 
     Box(
+        // modifier yang di-pass dari luar sekarang mengontrol ukuran Box terluar
         modifier = modifier
             .padding(top = 2.dp)
             .height(buttonHeight + buttonOffset),
         contentAlignment = Alignment.TopCenter
     ) {
+        // HAPUS .fillMaxWidth() dari sini
         Spacer(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxWidth() // <-- BIARKAN INI AGAR SHADOW MENGIKUTI LEBAR
                 .height(buttonHeight)
                 .align(Alignment.BottomCenter)
                 .clip(RoundedCornerShape(cornerRadius))
                 .background(shadowColor)
         )
 
+        // HAPUS .fillMaxWidth() dari sini juga
         Box(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxWidth() // <-- BIARKAN INI AGAR TOMBOL UTAMA MENGIKUTI LEBAR
                 .height(buttonHeight)
                 .offset(y = (-buttonOffset))
                 .clip(RoundedCornerShape(cornerRadius))
